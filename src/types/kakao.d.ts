@@ -2,11 +2,7 @@ interface KakaoStatic {
   init: (key: string) => void;
   isInitialized: () => boolean;
   Auth: {
-    login: (options: {
-      scope?: string;
-      success?: (authObj: unknown) => void;
-      fail?: (err: unknown) => void;
-    }) => void;
+    authorize: (options: { redirectUri: string; scope?: string }) => void;
     logout: (callback?: () => void) => void;
   };
   API: {
@@ -21,13 +17,9 @@ interface KakaoStatic {
 interface KakaoUserMeResponse {
   id: number;
   kakao_account?: {
-    profile?: {
-      nickname?: string;
-    };
+    profile?: { nickname?: string };
   };
-  properties?: {
-    nickname?: string;
-  };
+  properties?: { nickname?: string };
 }
 
 interface Window {

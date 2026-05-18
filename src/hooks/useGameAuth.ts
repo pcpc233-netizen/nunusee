@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
 const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
+const KAKAO_REST_KEY = '59cc028d28edb52a0ff9669873b10753';
+const REDIRECT_URI = 'https://nunusee.vercel.app';
 
 interface KakaoUser {
   id: string;
@@ -20,8 +22,61 @@ export function useGameAuth() {
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
 
+  const handleKakaoCode = useCallback(async (code: string) => {
+    try {
+      const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          client_id: KAKAO_REST_KEY,
+          redirect_uri: REDIRECT_URI,
+          code,
+        }),
+      });
+      const tokenData = await tokenRes.json();
+      if (!tokenData.access_token) {
+        console.error('Token error:', tokenData);
+        return;
+      }
+
+      const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
+        headers: { Authorization: `Bearer ${tokenData.access_token}` },
+      });
+      const userData: KakaoUserMeResponse = await userRes.json();
+
+      const kakaoId = String(userData.id);
+      const nickname =
+        userData.kakao_account?.profile?.nickname ||
+        userData.properties?.nickname ||
+        '덕희팬';
+
+      const storageKey = `kakao_uuid_${kakaoId}`;
+      let localUuid = localStorage.getItem(storageKey);
+      if (!localUuid) {
+        localUuid = crypto.randomUUID();
+        localStorage.setItem(storageKey, localUuid);
+      }
+
+      localStorage.setItem('kakaoNickname', nickname);
+      localStorage.setItem('kakaoUserId', localUuid);
+      setKakaoUser({ id: localUuid, nickname });
+    } catch (err) {
+      console.error('Kakao callback error', err);
+    }
+  }, []);
+
   useEffect(() => {
     initKakao();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      window.history.replaceState({}, '', window.location.pathname);
+      handleKakaoCode(code).finally(() => setLoading(false));
+      return;
+    }
 
     const savedId = localStorage.getItem('kakaoUserId');
     const savedNickname = localStorage.getItem('kakaoNickname');
@@ -29,37 +84,13 @@ export function useGameAuth() {
       setKakaoUser({ id: savedId, nickname: savedNickname });
     }
     setLoading(false);
-  }, []);
+  }, [handleKakaoCode]);
 
   const signInWithKakao = () => {
     initKakao();
-    window.Kakao.Auth.login({
-      scope: 'profile_nickname,profile_image',
-      success: () => {
-        window.Kakao.API.request({
-          url: '/v2/user/me',
-          success: (res) => {
-            const kakaoId = String(res.id);
-            const nickname =
-              res.kakao_account?.profile?.nickname ||
-              res.properties?.nickname ||
-              '덕희팬';
-
-            const storageKey = `kakao_uuid_${kakaoId}`;
-            let localUuid = localStorage.getItem(storageKey);
-            if (!localUuid) {
-              localUuid = crypto.randomUUID();
-              localStorage.setItem(storageKey, localUuid);
-            }
-
-            localStorage.setItem('kakaoNickname', nickname);
-            localStorage.setItem('kakaoUserId', localUuid);
-            setKakaoUser({ id: localUuid, nickname });
-          },
-          fail: (err) => console.error('Kakao user info failed', err),
-        });
-      },
-      fail: (err) => console.error('Kakao login failed', err),
+    window.Kakao.Auth.authorize({
+      redirectUri: REDIRECT_URI,
+      scope: 'profile_nickname profile_image',
     });
   };
 
@@ -72,9 +103,6 @@ export function useGameAuth() {
     localStorage.removeItem('kakaoNickname');
     localStorage.removeItem('kakaoUserId');
     setKakaoUser(null);
-    if (window.Kakao?.Auth) {
-      window.Kakao.Auth.logout();
-    }
   };
 
   const signInAsGuest = () => {

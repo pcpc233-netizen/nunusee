@@ -62,10 +62,10 @@ export async function submitScore(
   return { isTop20, percentile: Math.round(percentile), invitationId };
 }
 
-// 리더보드 Top 100
+// 리더보드 Top 100 (유저당 최고점만)
 export async function fetchLeaderboard(): Promise<ScoreEntry[]> {
   const { data, error } = await db
-    .from('game_scores')
+    .from('game_best_scores')
     .select('id, user_id, nickname, score, played_at')
     .order('score', { ascending: false })
     .limit(100);
@@ -74,10 +74,10 @@ export async function fetchLeaderboard(): Promise<ScoreEntry[]> {
   return (data ?? []) as ScoreEntry[];
 }
 
-// 전체 플레이어 수
+// 전체 고유 플레이어 수
 export async function fetchPlayerCount(): Promise<number> {
   const { count } = await db
-    .from('game_scores')
+    .from('game_best_scores')
     .select('user_id', { count: 'exact', head: true });
 
   return count ?? 0;

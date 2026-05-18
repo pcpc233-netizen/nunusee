@@ -27,7 +27,10 @@ export function useGameAuth() {
   const signInWithKakao = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',
-      options: { redirectTo: window.location.origin },
+      options: {
+        redirectTo: window.location.origin,
+        scopes: 'profile_nickname profile_image',
+      },
     });
   };
 

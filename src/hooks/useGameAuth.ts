@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
-const KAKAO_JS_KEY = '6a7527169a91306857186d8191a04558';
+const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
 
 interface KakaoUser {
   id: string;

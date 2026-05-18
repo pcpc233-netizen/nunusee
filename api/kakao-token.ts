@@ -16,6 +16,7 @@ export default async function handler(req: any, res: any) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         client_id: '59cc028d28edb52a0ff9669873b10753',
+        client_secret: 'U7b60pKzM9zdOhPYWos9jAUwJt6P6Z2X',
         redirect_uri: 'https://nunusee.vercel.app',
         code,
       }).toString(),

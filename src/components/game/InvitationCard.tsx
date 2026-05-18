@@ -11,8 +11,8 @@ interface Props {
 }
 
 const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
-const SITE_URL = 'https://nunusee.vercel.app';
-const OG_IMAGE = 'https://nunusee.vercel.app/characters/deokhee.png';
+const SITE_URL = 'https://calcmoum.com';
+const OG_IMAGE = 'https://calcmoum.com/characters/deokhee.png';
 
 function initKakao() {
   if (window.Kakao && !window.Kakao.isInitialized()) {

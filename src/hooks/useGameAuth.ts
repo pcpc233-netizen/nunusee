@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
 const KAKAO_REST_KEY = '59cc028d28edb52a0ff9669873b10753';
-const REDIRECT_URI = 'https://nunusee.vercel.app';
+const REDIRECT_URI = 'https://calcmoum.com';
 
 interface KakaoUser {
   id: string;

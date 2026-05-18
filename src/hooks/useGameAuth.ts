@@ -2,19 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
-const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
 const KAKAO_REST_KEY = '59cc028d28edb52a0ff9669873b10753';
 const REDIRECT_URI = 'https://nunusee.vercel.app';
 
 interface KakaoUser {
   id: string;
   nickname: string;
-}
-
-function initKakao() {
-  if (window.Kakao && !window.Kakao.isInitialized()) {
-    window.Kakao.init(KAKAO_JS_KEY);
-  }
 }
 
 export function useGameAuth() {
@@ -43,7 +36,7 @@ export function useGameAuth() {
       const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
         headers: { Authorization: `Bearer ${tokenData.access_token}` },
       });
-      const userData: KakaoUserMeResponse = await userRes.json();
+      const userData = await userRes.json();
 
       const kakaoId = String(userData.id);
       const nickname =
@@ -67,8 +60,6 @@ export function useGameAuth() {
   }, []);
 
   useEffect(() => {
-    initKakao();
-
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
 
@@ -86,12 +77,15 @@ export function useGameAuth() {
     setLoading(false);
   }, [handleKakaoCode]);
 
+  // Kakao JS SDK 없이 REST API로 직접 OAuth 리다이렉트
   const signInWithKakao = () => {
-    initKakao();
-    window.Kakao.Auth.authorize({
-      redirectUri: REDIRECT_URI,
-      scope: 'profile_nickname profile_image',
+    const params = new URLSearchParams({
+      client_id: KAKAO_REST_KEY,
+      redirect_uri: REDIRECT_URI,
+      response_type: 'code',
+      scope: 'profile_nickname,profile_image',
     });
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?${params}`;
   };
 
   const signOut = () => {

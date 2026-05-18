@@ -21,10 +21,16 @@ export default defineConfig(({ mode }) => {
       exclude: ['lucide-react'],
     },
     build: {
+      chunkSizeWarningLimit: 1800,
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'index.html'),
           admin: resolve(__dirname, 'admin.html'),
+        },
+        output: {
+          manualChunks: {
+            phaser: ['phaser'],
+          },
         },
       },
     },

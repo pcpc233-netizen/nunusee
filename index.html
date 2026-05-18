@@ -6,7 +6,17 @@
     <link rel="alternate icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>서울 버스 실시간 정보 | 모든 노선 도착시간 · 정류소 위치 · 시간표</title>
+    <title>덕희의 마이웨이런 | PHILUMINATE × 누누씨</title>
+    <meta name="description" content="덕희 토끼와 함께 마이웨이로 달려라! 상위 20% 달성 시 오프라인 팝업 초대장 발급. 필루미네이트 × 누누씨 콜라보레이션 게임." />
+
+    <!-- Google Fonts: Nanum Gothic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Kakao JS SDK -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+      integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+      crossorigin="anonymous"></script>
     <meta name="description" content="서울시 모든 버스 노선의 실시간 도착 정보, 정류소 위치, 운행 시간표를 확인하세요. 공항버스, 마을버스, 간선버스, 지선버스 정보 제공. 매일 자동 업데이트." />
     <meta name="keywords" content="서울 버스, 버스 도착 정보, 버스 시간표, 버스 정류소, 공항버스, 마을버스, 간선버스, 지선버스, 실시간 버스, 버스 위치, 서울 교통, 대중교통" />
     <meta name="author" content="서울 버스 정보" />
@@ -53,23 +63,6 @@
   <body>
     <div id="root"></div>
     <div id="admin-root"></div>
-    <script type="module">
-      // Route based on hostname
-      (async () => {
-        if (window.location.hostname === 'admin.bustime.site') {
-          // Load admin app
-          document.getElementById('root').style.display = 'none';
-          document.title = '관리자 대시보드 - 전국 교통정보 플랫폼';
-          const metaRobots = document.querySelector('meta[name="robots"]');
-          if (metaRobots) metaRobots.content = 'noindex, nofollow';
-
-          await import('/src/admin-main.tsx');
-        } else {
-          // Load main app
-          document.getElementById('admin-root').style.display = 'none';
-          await import('/src/main.tsx');
-        }
-      })();
-    </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

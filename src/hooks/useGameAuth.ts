@@ -17,32 +17,19 @@ export function useGameAuth() {
 
   const handleKakaoCode = useCallback(async (code: string) => {
     try {
-      const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
+      const res = await fetch('/api/kakao-token', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          client_id: KAKAO_REST_KEY,
-          redirect_uri: REDIRECT_URI,
-          code,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
       });
-      const tokenData = await tokenRes.json();
-      if (!tokenData.access_token) {
-        console.error('Token error:', tokenData);
+      const data = await res.json();
+      if (!data.id) {
+        console.error('Auth failed:', data);
         return;
       }
 
-      const userRes = await fetch('https://kapi.kakao.com/v2/user/me', {
-        headers: { Authorization: `Bearer ${tokenData.access_token}` },
-      });
-      const userData = await userRes.json();
-
-      const kakaoId = String(userData.id);
-      const nickname =
-        userData.kakao_account?.profile?.nickname ||
-        userData.properties?.nickname ||
-        '덕희팬';
+      const kakaoId = String(data.id);
+      const nickname = data.nickname || '덕희팬';
 
       const storageKey = `kakao_uuid_${kakaoId}`;
       let localUuid = localStorage.getItem(storageKey);

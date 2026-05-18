@@ -24,7 +24,7 @@ export function useGameAuth() {
       });
       const data = await res.json();
       if (!data.id) {
-        console.error('Auth failed:', data);
+        alert('로그인 오류: ' + JSON.stringify(data));
         return;
       }
 

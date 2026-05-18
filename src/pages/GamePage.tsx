@@ -29,7 +29,7 @@ export default function GamePage() {
             <img src="/characters/deokhee.png" alt="누누씨" className="w-9 h-9 rounded-full object-cover border-2 border-amber-200 shadow-sm" />
             <div>
               <p className="font-black text-gray-900 text-sm leading-tight">덕희의 마이웨이런</p>
-              <p className="text-xs text-amber-600">PHILUMINATE × 누누씨</p>
+              <p className="text-xs text-amber-600">FILLUMINATE × 누누씨</p>
             </div>
           </div>
           {isLoggedIn && (

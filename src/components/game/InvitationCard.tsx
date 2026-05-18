@@ -10,6 +10,16 @@ interface Props {
   invitationId: string | null;
 }
 
+const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
+const SITE_URL = 'https://nunusee.vercel.app';
+const OG_IMAGE = 'https://nunusee.vercel.app/characters/deokhee.png';
+
+function initKakao() {
+  if (window.Kakao && !window.Kakao.isInitialized()) {
+    window.Kakao.init(KAKAO_JS_KEY);
+  }
+}
+
 export default function InvitationCard({ score, nickname, characterName = '덕춘', characterColor = '#fb923c', isTop20, percentile, invitationId }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -18,22 +28,34 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       ? `${nickname}님이 덕희의 마이웨이런에서 ${score}m를 달렸어요! 상위 ${Math.round(percentile)}%로 팝업 초대장을 받았습니다 🐰`
       : `${nickname}님이 덕희의 마이웨이런에서 ${score}m를 달렸어요! 도전해보세요 🏃`;
 
-    const url = window.location.href;
-    // Kakao JS SDK가 없으면 navigator.share fallback
-    if (typeof window.Kakao !== 'undefined' && window.Kakao.isInitialized()) {
+    initKakao();
+
+    if (window.Kakao?.isInitialized?.()) {
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
           title: '덕희의 마이웨이런 🐰',
           description: msg,
-          imageUrl: 'https://your-image-url.com/og.png', // TODO: OG 이미지
-          link: { mobileWebUrl: url, webUrl: url },
+          imageUrl: OG_IMAGE,
+          link: { mobileWebUrl: SITE_URL, webUrl: SITE_URL },
         },
-        buttons: [{ title: '나도 도전하기', link: { mobileWebUrl: url, webUrl: url } }],
+        buttons: [{ title: '나도 도전하기', link: { mobileWebUrl: SITE_URL, webUrl: SITE_URL } }],
       });
     } else {
-      navigator.share?.({ title: '덕희의 마이웨이런', text: msg, url }) ??
-        navigator.clipboard.writeText(`${msg} ${url}`).then(() => alert('링크 복사됨!'));
+      // fallback: 카카오톡 공유 URL 직접 열기
+      const kakaoShareUrl = `https://sharer.kakao.com/talk/friends/picker/link?app_key=${KAKAO_JS_KEY}&validation_action=share&validation_params=${encodeURIComponent(JSON.stringify({
+        link_ver: '4.0',
+        template_object: {
+          object_type: 'feed',
+          content: {
+            title: '덕희의 마이웨이런 🐰',
+            description: msg,
+            image_url: OG_IMAGE,
+            link: { web_url: SITE_URL, mobile_web_url: SITE_URL },
+          },
+        },
+      }))}`;
+      window.open(kakaoShareUrl, '_blank', 'width=500,height=700');
     }
   };
 
@@ -68,7 +90,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       >
         <div className="p-8 text-center">
           <div className="text-5xl mb-3">🐰</div>
-          <p className="text-xs font-bold tracking-widest text-amber-700 mb-1">PHILUMINATE × 누누씨</p>
+          <p className="text-xs font-bold tracking-widest text-amber-700 mb-1">FILLUMINATE × 누누씨</p>
           <h2 className="text-2xl font-black text-gray-900 mb-1">팝업 초대장</h2>
           <p className="text-sm text-amber-800 mb-4">오프라인 팝업 스토어 입장 초대</p>
 
@@ -79,7 +101,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
           </div>
 
           <p className="text-xs font-bold mb-1" style={{ color: characterColor }}>{characterName}와 함께 달렸어요 🐰</p>
-        <p className="text-sm font-bold text-gray-800">{nickname}님을 초대합니다</p>
+          <p className="text-sm font-bold text-gray-800">{nickname}님을 초대합니다</p>
           <p className="text-xs text-gray-500 mt-1">초대장 ID: {invitationId?.slice(0, 8).toUpperCase()}</p>
         </div>
 
@@ -108,16 +130,4 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       </div>
     </div>
   );
-}
-
-// Kakao SDK 타입
-declare global {
-  interface Window {
-    Kakao: {
-      isInitialized: () => boolean;
-      Share: {
-        sendDefault: (options: object) => void;
-      };
-    };
-  }
 }

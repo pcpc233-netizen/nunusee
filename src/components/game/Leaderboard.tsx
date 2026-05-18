@@ -5,12 +5,17 @@ export default function Leaderboard({ myUserId }: { myUserId?: string }) {
   const [board, setBoard] = useState<ScoreEntry[]>([]);
   const [playerCount, setPlayerCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([fetchLeaderboard(), fetchPlayerCount()])
       .then(([entries, count]) => {
         setBoard(entries);
         setPlayerCount(count);
+      })
+      .catch((err) => {
+        console.error('Leaderboard fetch error:', err);
+        setError('랭킹을 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
       })
       .finally(() => setLoading(false));
   }, []);
@@ -19,6 +24,20 @@ export default function Leaderboard({ myUserId }: { myUserId?: string }) {
 
   if (loading) {
     return <div className="text-center py-12 text-amber-600 animate-pulse">랭킹 불러오는 중...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400 text-sm">{error}</p>
+        <button
+          onClick={() => { setError(null); setLoading(true); }}
+          className="mt-3 text-xs text-amber-600 underline"
+        >
+          다시 시도
+        </button>
+      </div>
+    );
   }
 
   return (

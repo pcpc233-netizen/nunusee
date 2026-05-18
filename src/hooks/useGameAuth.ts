@@ -1,77 +1,105 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import type { User } from '@supabase/supabase-js';
 
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
+const KAKAO_JS_KEY = '6a7527169a91306857186d8191a04558';
+
+interface KakaoUser {
+  id: string;
+  nickname: string;
+}
+
+function initKakao() {
+  if (window.Kakao && !window.Kakao.isInitialized()) {
+    window.Kakao.init(KAKAO_JS_KEY);
+  }
+}
 
 export function useGameAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [kakaoUser, setKakaoUser] = useState<KakaoUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null);
-      setLoading(false);
-    });
+    initKakao();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) setIsGuest(false);
-    });
-
-    return () => listener.subscription.unsubscribe();
+    const savedId = localStorage.getItem('kakaoUserId');
+    const savedNickname = localStorage.getItem('kakaoNickname');
+    if (savedId && savedNickname) {
+      setKakaoUser({ id: savedId, nickname: savedNickname });
+    }
+    setLoading(false);
   }, []);
 
-  const signInWithKakao = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'kakao',
-      options: {
-        redirectTo: window.location.origin,
-        scopes: 'profile_nickname profile_image',
+  const signInWithKakao = () => {
+    initKakao();
+    window.Kakao.Auth.login({
+      scope: 'profile_nickname,profile_image',
+      success: () => {
+        window.Kakao.API.request({
+          url: '/v2/user/me',
+          success: (res) => {
+            const kakaoId = String(res.id);
+            const nickname =
+              res.kakao_account?.profile?.nickname ||
+              res.properties?.nickname ||
+              '덕희팬';
+
+            const storageKey = `kakao_uuid_${kakaoId}`;
+            let localUuid = localStorage.getItem(storageKey);
+            if (!localUuid) {
+              localUuid = crypto.randomUUID();
+              localStorage.setItem(storageKey, localUuid);
+            }
+
+            localStorage.setItem('kakaoNickname', nickname);
+            localStorage.setItem('kakaoUserId', localUuid);
+            setKakaoUser({ id: localUuid, nickname });
+          },
+          fail: (err) => console.error('Kakao user info failed', err),
+        });
       },
+      fail: (err) => console.error('Kakao login failed', err),
     });
   };
 
-  const signOut = async () => {
-    setIsGuest(false);
-    await supabase.auth.signOut();
+  const signOut = () => {
+    if (isGuest) {
+      localStorage.removeItem('guestNickname');
+      setIsGuest(false);
+      return;
+    }
+    localStorage.removeItem('kakaoNickname');
+    localStorage.removeItem('kakaoUserId');
+    setKakaoUser(null);
+    if (window.Kakao?.Auth) {
+      window.Kakao.Auth.logout();
+    }
   };
 
-  // 개발/테스트 환경 전용 게스트 로그인
   const signInAsGuest = () => {
     const randomNick = GUEST_NICKNAMES[Math.floor(Math.random() * GUEST_NICKNAMES.length)];
     localStorage.setItem('guestNickname', randomNick);
     setIsGuest(true);
   };
 
-  const signOutGuest = () => {
-    localStorage.removeItem('guestNickname');
-    setIsGuest(false);
-  };
-
-  const isLoggedIn = !!user || isGuest;
+  const isLoggedIn = !!kakaoUser || isGuest;
 
   const nickname = isGuest
     ? (localStorage.getItem('guestNickname') ?? '테스트토끼')
-    : (user?.user_metadata?.name ||
-       user?.user_metadata?.full_name ||
-       user?.email?.split('@')[0] ||
-       '익명');
+    : (kakaoUser?.nickname ?? '익명');
 
-  // 게스트는 점수 저장 시 더미 userId 사용
-  const effectiveUserId = isGuest ? GUEST_ID : (user?.id ?? '');
+  const effectiveUserId = isGuest ? GUEST_ID : (kakaoUser?.id ?? '');
 
   return {
-    user,
+    user: kakaoUser ? { id: kakaoUser.id } : null,
     loading,
     isGuest,
     isLoggedIn,
     nickname,
     effectiveUserId,
     signInWithKakao,
-    signOut: isGuest ? signOutGuest : signOut,
+    signOut,
     signInAsGuest,
   };
 }

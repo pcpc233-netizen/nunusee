@@ -10,11 +10,11 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     define: {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(
-        env.VITE_SUPABASE_URL || 'https://gibqdecjcdyeyxtknbok.supabase.co'
+        env.VITE_SUPABASE_URL || 'https://syysjxhlcnblhcnesqcf.supabase.co'
       ),
       'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(
         env.VITE_SUPABASE_ANON_KEY ||
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYnFkZWNqY2R5ZXl4dGtuYm9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3NTMwNzksImV4cCI6MjA3ODMyOTA3OX0.zstQH1P-4pPb2y74LhrH3uSws9I_KkQ55mPRAR0up84'
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5eXNqeGhsY25ibGhjbmVzcWNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNjQ4ODYsImV4cCI6MjA5NDY0MDg4Nn0.0aanP9tVR6Z8CtLveQUcz8ThxFk-Aoe6klBUqbUjmKs'
       ),
     },
     optimizeDeps: {

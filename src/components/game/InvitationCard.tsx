@@ -61,18 +61,18 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
 
   if (!isTop20) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-6 text-center max-w-md w-full border border-amber-100">
+      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 text-center w-full border border-amber-100">
         <p className="text-3xl mb-2">🏃</p>
-        <p className="text-xl font-bold text-gray-800 mb-1">{score}m 달성!</p>
+        <p className="text-lg sm:text-xl font-bold text-gray-800 mb-1">{score}m 달성!</p>
         <p className="text-gray-500 text-sm mb-1">
           상위 {Math.round(percentile)}% 구간이에요.
         </p>
-        <p className="text-amber-600 font-semibold mb-4">
+        <p className="text-amber-600 font-semibold text-sm mb-4">
           상위 20% 돌파하면 팝업 초대장이 발급됩니다!
         </p>
         <button
           onClick={shareKakao}
-          className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-xl transition-colors"
+          className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-xl transition-colors text-sm"
         >
           카카오로 친구에게 자랑하기
         </button>
@@ -81,22 +81,22 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 max-w-md w-full">
+    <div className="flex flex-col items-center gap-3 w-full">
       {/* 초대장 카드 */}
       <div
         ref={cardRef}
         className="w-full rounded-3xl overflow-hidden shadow-2xl"
         style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%)' }}
       >
-        <div className="p-8 text-center">
-          <div className="text-5xl mb-3">🐰</div>
+        <div className="p-5 sm:p-8 text-center">
+          <div className="text-4xl sm:text-5xl mb-2">🐰</div>
           <p className="text-xs font-bold tracking-widest text-amber-700 mb-1">FILLUMINATE × 누누씨</p>
-          <h2 className="text-2xl font-black text-gray-900 mb-1">팝업 초대장</h2>
-          <p className="text-sm text-amber-800 mb-4">오프라인 팝업 스토어 입장 초대</p>
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-1">팝업 초대장</h2>
+          <p className="text-xs sm:text-sm text-amber-800 mb-3">오프라인 팝업 스토어 입장 초대</p>
 
-          <div className="bg-white bg-opacity-60 rounded-2xl p-4 mb-4">
+          <div className="bg-white bg-opacity-60 rounded-2xl p-3 sm:p-4 mb-3">
             <p className="text-xs text-gray-500 mb-1">달성 기록</p>
-            <p className="text-3xl font-black text-gray-900">{score}m</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-900">{score}m</p>
             <p className="text-sm text-amber-700 font-bold">상위 {Math.round(percentile)}% 달성!</p>
           </div>
 
@@ -110,22 +110,22 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
         </div>
       </div>
 
-      {/* 액션 버튼 */}
-      <div className="flex gap-3 w-full">
+      {/* 액션 버튼 — 모바일에서 세로 스택 */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
         <button
           onClick={shareKakao}
-          className="flex-1 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-xl transition-colors text-sm"
+          className="w-full sm:flex-1 py-3 bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 text-gray-900 font-bold rounded-xl transition-colors text-sm"
         >
-          카카오로 공유하기
+          🐾 카카오로 공유하기
         </button>
         <button
           onClick={() => {
             const text = `덕희의 마이웨이런 ${score}m · 상위 ${Math.round(percentile)}% · 초대장 ID: ${invitationId?.slice(0, 8).toUpperCase()}`;
             navigator.clipboard.writeText(text).then(() => alert('초대장 정보 복사됨!'));
           }}
-          className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors text-sm"
+          className="w-full sm:flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors text-sm"
         >
-          정보 복사
+          📋 정보 복사
         </button>
       </div>
     </div>

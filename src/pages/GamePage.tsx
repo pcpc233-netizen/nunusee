@@ -52,14 +52,14 @@ export default function GamePage() {
       </header>
 
       {/* Hero banner */}
-      <div className="bg-gradient-to-r from-amber-400 to-yellow-400 py-6 text-center">
-        <p className="text-white font-black text-lg">🏃 마이웨이로 살아남아라!</p>
-        <p className="text-amber-100 text-sm mt-1">상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
+      <div className="bg-gradient-to-r from-amber-400 to-yellow-400 py-4 sm:py-6 text-center">
+        <p className="text-white font-black text-base sm:text-lg">🏃 마이웨이로 살아남아라!</p>
+        <p className="text-amber-100 text-xs sm:text-sm mt-1">상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
       </div>
 
       {/* Tab navigation */}
-      <div className="max-w-4xl mx-auto px-4 mt-6">
-        <div className="flex bg-white rounded-2xl p-1 shadow-sm mb-6 max-w-xs mx-auto">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
+        <div className="flex bg-white rounded-2xl p-1 shadow-sm mb-4 sm:mb-6 max-w-xs mx-auto">
           {(['game', 'leaderboard'] as Tab[]).map((t) => (
             <button
               key={t}
@@ -74,15 +74,15 @@ export default function GamePage() {
         </div>
 
         {tab === 'game' && (
-          <div className="flex flex-col items-center gap-6 pb-12">
+          <div className="flex flex-col items-center gap-4 sm:gap-6 pb-12">
             {/* How to play */}
-            <div className="bg-white rounded-2xl shadow p-4 w-full max-w-2xl">
-              <h3 className="font-bold text-gray-700 mb-3 text-sm">게임 방법</h3>
-              <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
-                <div className="flex items-center gap-2">⌨️ <span>스페이스 / 화면 탭 → 점프</span></div>
-                <div className="flex items-center gap-2">☕ <span>아아 GET → 더블점프 8초</span></div>
-                <div className="flex items-center gap-2">⭐ <span>마이웨이배지 → 무적 5초</span></div>
-                <div className="flex items-center gap-2">🏆 <span>상위 20% → 팝업 초대장!</span></div>
+            <div className="bg-white rounded-2xl shadow p-3 sm:p-4 w-full max-w-2xl">
+              <h3 className="font-bold text-gray-700 mb-2 text-sm">게임 방법</h3>
+              <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">⌨️ <span>스페이스 / 화면 탭 → 점프</span></div>
+                <div className="flex items-center gap-1.5">☕ <span>아아 GET → 더블점프 8초</span></div>
+                <div className="flex items-center gap-1.5">⭐ <span>마이웨이배지 → 무적 5초</span></div>
+                <div className="flex items-center gap-1.5">🏆 <span>상위 20% → 팝업 초대장!</span></div>
               </div>
             </div>
 

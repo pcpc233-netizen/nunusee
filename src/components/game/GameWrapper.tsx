@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { gameConfig } from '../../game/config';
 import { submitScore } from '../../lib/game-api';
 import { DEFAULT_CHARACTER, type CharacterDef } from '../../game/characters';
+import { GAME_WIDTH, GAME_HEIGHT } from '../../game/config';
 import CharacterSelect from './CharacterSelect';
 import InvitationCard from './InvitationCard';
 
@@ -15,6 +16,7 @@ type Phase = 'select' | 'playing';
 
 export default function GameWrapper({ userId, nickname }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<Phaser.Game | null>(null);
   const [phase, setPhase] = useState<Phase>('select');
   const [character, setCharacter] = useState<CharacterDef>(DEFAULT_CHARACTER);
@@ -50,6 +52,7 @@ export default function GameWrapper({ userId, nickname }: Props) {
       try {
         const res = await submitScore(userId, nickname, score);
         setResult({ score, ...res });
+        setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
       } catch (e) {
         console.error('점수 저장 실패', e);
         setResult({ score, isTop20: false, percentile: 100, invitationId: null });
@@ -87,7 +90,7 @@ export default function GameWrapper({ userId, nickname }: Props) {
 
   if (phase === 'select') {
     return (
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-6">
+      <div className="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-4 sm:p-6">
         <CharacterSelect onSelect={handleCharacterSelect} />
       </div>
     );
@@ -110,18 +113,24 @@ export default function GameWrapper({ userId, nickname }: Props) {
         </button>
       </div>
 
-      {/* Phaser canvas */}
+      {/* Phaser canvas — scales to fit mobile */}
       <div
-        ref={containerRef}
-        className="rounded-2xl overflow-hidden shadow-2xl border-4"
-        style={{ borderColor: character.cssColor + '88', maxWidth: '100%' }}
-      />
+        className="w-full rounded-2xl overflow-hidden shadow-2xl border-4"
+        style={{
+          borderColor: character.cssColor + '88',
+          maxWidth: GAME_WIDTH,
+          aspectRatio: `${GAME_WIDTH}/${GAME_HEIGHT}`,
+        }}
+      >
+        <div ref={containerRef} className="w-full h-full" />
+      </div>
 
       {submitting && (
         <p className="text-amber-600 font-bold animate-pulse">점수 계산 중...</p>
       )}
 
       {result && (
+        <div ref={resultRef} className="w-full flex flex-col items-center">
         <InvitationCard
           score={result.score}
           nickname={nickname}
@@ -131,6 +140,7 @@ export default function GameWrapper({ userId, nickname }: Props) {
           percentile={result.percentile}
           invitationId={result.invitationId}
         />
+        </div>
       )}
     </div>
   );

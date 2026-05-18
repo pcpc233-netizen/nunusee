@@ -23,7 +23,7 @@ export default function CharacterSelect({ onSelect }: Props) {
       </div>
 
       {/* Character cards */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
         {CHARACTERS.map((char) => {
           const isSelected = selected.key === char.key;
           const imgFailed = imgErrors[char.key];
@@ -32,21 +32,21 @@ export default function CharacterSelect({ onSelect }: Props) {
             <button
               key={char.key}
               onClick={() => setSelected(char)}
-              className={`relative flex flex-col items-center rounded-2xl p-4 transition-all border-4 ${
+              className={`relative flex flex-col items-center rounded-2xl p-2 sm:p-4 transition-all border-4 ${
                 isSelected
                   ? 'border-amber-400 shadow-xl scale-105 bg-white'
                   : 'border-transparent bg-white/60 hover:bg-white hover:scale-102 hover:shadow-md'
               }`}
             >
               {isSelected && (
-                <span className="absolute -top-2 -right-2 bg-amber-400 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow">
-                  선택됨
+                <span className="absolute -top-2 -right-2 bg-amber-400 text-white text-xs font-bold px-1.5 py-0.5 rounded-full shadow">
+                  ✓
                 </span>
               )}
 
               {/* Character image */}
               <div
-                className="w-24 h-24 rounded-2xl overflow-hidden mb-3 flex items-center justify-center shadow-inner"
+                className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl overflow-hidden mb-2 flex items-center justify-center shadow-inner"
                 style={{ backgroundColor: char.cssColor + '33' }}
               >
                 {!imgFailed ? (
@@ -58,9 +58,8 @@ export default function CharacterSelect({ onSelect }: Props) {
                     onError={() => setImgErrors(prev => ({ ...prev, [char.key]: true }))}
                   />
                 ) : (
-                  /* Fallback: emoji + colored circle */
                   <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center text-4xl"
+                    className="w-10 h-10 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-2xl sm:text-4xl"
                     style={{ backgroundColor: char.cssColor }}
                   >
                     🐰
@@ -69,11 +68,11 @@ export default function CharacterSelect({ onSelect }: Props) {
               </div>
 
               {/* Info */}
-              <p className="font-black text-gray-900 text-lg leading-tight">{char.name}</p>
-              <p className="text-xs font-bold mt-0.5" style={{ color: char.cssColor }}>
+              <p className="font-black text-gray-900 text-sm sm:text-lg leading-tight">{char.name}</p>
+              <p className="text-xs font-bold mt-0.5 hidden sm:block" style={{ color: char.cssColor }}>
                 {char.trait}
               </p>
-              <p className="text-xs text-gray-400 mt-1 text-center leading-snug">{char.desc}</p>
+              <p className="text-xs text-gray-400 mt-0.5 text-center leading-snug hidden sm:block">{char.desc}</p>
             </button>
           );
         })}
@@ -81,19 +80,19 @@ export default function CharacterSelect({ onSelect }: Props) {
 
       {/* Selected preview strip */}
       <div
-        className="rounded-2xl p-4 mb-4 flex items-center gap-3"
+        className="rounded-2xl p-3 sm:p-4 mb-3 flex items-center gap-3"
         style={{ backgroundColor: selected.cssColor + '22', borderLeft: `4px solid ${selected.cssColor}` }}
       >
-        <span className="text-3xl">{selected.emoji}</span>
+        <span className="text-2xl sm:text-3xl">{selected.emoji}</span>
         <div>
-          <p className="font-black text-gray-900">{selected.name}으로 달릴게요!</p>
-          <p className="text-sm text-gray-500">{selected.desc}</p>
+          <p className="font-black text-gray-900 text-sm sm:text-base">{selected.name}으로 달릴게요!</p>
+          <p className="text-xs sm:text-sm text-gray-500">{selected.desc}</p>
         </div>
       </div>
 
       <button
         onClick={() => onSelect(selected)}
-        className="w-full py-4 rounded-2xl font-black text-white text-lg shadow-lg transition-all hover:scale-105 active:scale-95"
+        className="w-full py-3 sm:py-4 rounded-2xl font-black text-white text-base sm:text-lg shadow-lg transition-all hover:scale-105 active:scale-95"
         style={{ backgroundColor: selected.cssColor }}
       >
         {selected.name}{korParticle(selected.name, '로', '으로')} 시작하기 🏃

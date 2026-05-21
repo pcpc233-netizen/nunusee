@@ -42,6 +42,8 @@ export class GameScene extends Phaser.Scene {
   private maxJumps = 1;
   private isInvincible = false;
   private baseScale = CHAR_SCALE;
+  private coffeeTimer: Phaser.Time.TimerEvent | null = null;
+  private badgeTimer: Phaser.Time.TimerEvent | null = null;
 
   private scoreText!: Phaser.GameObjects.Text;
   private eventText!: Phaser.GameObjects.Text;
@@ -190,14 +192,16 @@ export class GameScene extends Phaser.Scene {
 
     // ── 입력 ──
     this.input.keyboard?.on('keydown-SPACE', this.doJump, this);
+    this.input.keyboard?.on('keyup-SPACE', this.cutJump, this);
     this.input.on('pointerdown', this.doJump, this);
+    this.input.on('pointerup', this.cutJump, this);
   }
 
-  // ─── 점프 ───
+  // ─── 점프 (누르는 시간에 따라 높낮이 조절) ───
   private doJump() {
     if (this.isGameOver) return;
     if (this.jumpCount < this.maxJumps) {
-      this.player.setVelocityY(-720);
+      this.player.setVelocityY(-760);
       this.jumpCount++;
 
       // 달리기 트윈 일시정지
@@ -215,6 +219,14 @@ export class GameScene extends Phaser.Scene {
         yoyo: true,
         onComplete: () => { this.jumpStretchTween = null; },
       });
+    }
+  }
+
+  // ─── 점프 컷 (버튼 떼면 상승 속도 줄여 낮은 점프 구현) ───
+  private cutJump() {
+    if (this.isGameOver) return;
+    if (this.player.body.velocity.y < -300) {
+      this.player.setVelocityY(-300);
     }
   }
 
@@ -321,18 +333,28 @@ export class GameScene extends Phaser.Scene {
     if (type === 'item_coffee') {
       this.maxJumps = 2;
       this.showFloatingText('물약 GET! 🧪 더블점프!', 0xa855f7);
-      this.time.delayedCall(8000, () => { this.maxJumps = 1; });
+      // 기존 타이머 취소 후 새로 시작
+      if (this.coffeeTimer) { this.coffeeTimer.remove(); this.coffeeTimer = null; }
+      this.coffeeTimer = this.time.delayedCall(8000, () => {
+        this.maxJumps = 1;
+        this.coffeeTimer = null;
+      });
     } else {
       this.isInvincible = true;
       this.player.setTint(0xa855f7);
       this.showFloatingText('유령 배지! 👻 무적 5초!', 0xc4b5fd);
+      // 기존 타이머 취소 후 새로 시작
+      if (this.badgeTimer) { this.badgeTimer.remove(); this.badgeTimer = null; }
       // 무적 중 반짝임
       this.tweens.add({
         targets: this.player, alpha: 0.4, duration: 120,
         yoyo: true, repeat: 20,
         onComplete: () => { this.player.setAlpha(1); this.player.clearTint(); },
       });
-      this.time.delayedCall(5000, () => { this.isInvincible = false; });
+      this.badgeTimer = this.time.delayedCall(5000, () => {
+        this.isInvincible = false;
+        this.badgeTimer = null;
+      });
     }
   }
 

@@ -9,7 +9,7 @@ export const GROUND_Y = 320;
 
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
-  backgroundColor: '#fef3c7',
+  backgroundColor: '#0d0a2e',
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

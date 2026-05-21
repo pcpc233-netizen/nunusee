@@ -21,28 +21,28 @@ export default function GamePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-yellow-100">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d0a2e] to-[#1a0a4e]">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="bg-[#0d0a2e]/90 backdrop-blur border-b border-purple-900/50 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="/characters/deokhee.png" alt="누누씨" className="w-9 h-9 rounded-full object-cover border-2 border-amber-200 shadow-sm" />
+            <img src="/characters/deokhee.png" alt="누누씨" className="w-9 h-9 rounded-full object-cover border-2 border-purple-500/50 shadow-sm shadow-purple-500/30" />
             <div>
-              <p className="font-black text-gray-900 text-sm leading-tight">덕희의 마이웨이런</p>
-              <p className="text-xs text-amber-600">FILLUMINATE × 누누씨</p>
+              <p className="font-black text-purple-100 text-sm leading-tight">👻 덕희의 납량특집런</p>
+              <p className="text-xs text-purple-400">FILLUMINATE × 누누씨</p>
             </div>
           </div>
           {isLoggedIn && (
             <div className="flex items-center gap-3">
               {isGuest && (
-                <span className="text-xs bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full">
+                <span className="text-xs bg-purple-900/60 text-purple-300 font-bold px-2 py-0.5 rounded-full border border-purple-700/50">
                   테스트 모드
                 </span>
               )}
-              <span className="text-sm text-gray-600 font-medium">{nickname}</span>
+              <span className="text-sm text-purple-300 font-medium">{nickname}</span>
               <button
                 onClick={signOut}
-                className="text-xs text-gray-400 hover:text-gray-600 underline"
+                className="text-xs text-purple-500 hover:text-purple-300 underline"
               >
                 {isGuest ? '게스트 종료' : '로그아웃'}
               </button>
@@ -52,20 +52,20 @@ export default function GamePage() {
       </header>
 
       {/* Hero banner */}
-      <div className="bg-gradient-to-r from-amber-400 to-yellow-400 py-4 sm:py-6 text-center">
-        <p className="text-white font-black text-base sm:text-lg">🏃 마이웨이로 살아남아라!</p>
-        <p className="text-amber-100 text-xs sm:text-sm mt-1">상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
+      <div className="bg-gradient-to-r from-purple-900 to-violet-900 py-4 sm:py-6 text-center border-b border-purple-700/30">
+        <p className="text-purple-100 font-black text-base sm:text-lg">👻 귀신에게서 살아남아라!</p>
+        <p className="text-purple-400 text-xs sm:text-sm mt-1">🎃 납량특집 · 상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
       </div>
 
       {/* Tab navigation */}
       <div className="max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
-        <div className="flex bg-white rounded-2xl p-1 shadow-sm mb-4 sm:mb-6 max-w-xs mx-auto">
+        <div className="flex bg-purple-950/60 border border-purple-800/40 rounded-2xl p-1 shadow-sm mb-4 sm:mb-6 max-w-xs mx-auto">
           {(['game', 'leaderboard'] as Tab[]).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
               className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
-                tab === t ? 'bg-amber-400 text-white shadow' : 'text-gray-400 hover:text-gray-600'
+                tab === t ? 'bg-purple-600 text-white shadow' : 'text-purple-400 hover:text-purple-200'
               }`}
             >
               {t === 'game' ? '🎮 게임' : '🏆 랭킹'}
@@ -76,12 +76,12 @@ export default function GamePage() {
         {tab === 'game' && (
           <div className="flex flex-col items-center gap-4 sm:gap-6 pb-12">
             {/* How to play */}
-            <div className="bg-white rounded-2xl shadow p-3 sm:p-4 w-full max-w-2xl">
-              <h3 className="font-bold text-gray-700 mb-2 text-sm">게임 방법</h3>
-              <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-500">
+            <div className="bg-purple-950/50 border border-purple-800/40 rounded-2xl shadow p-3 sm:p-4 w-full max-w-2xl">
+              <h3 className="font-bold text-purple-300 mb-2 text-sm">🎃 게임 방법</h3>
+              <div className="grid grid-cols-2 gap-1.5 text-xs text-purple-400">
                 <div className="flex items-center gap-1.5">⌨️ <span>스페이스 / 화면 탭 → 점프</span></div>
-                <div className="flex items-center gap-1.5">☕ <span>아아 GET → 더블점프 8초</span></div>
-                <div className="flex items-center gap-1.5">⭐ <span>마이웨이배지 → 무적 5초</span></div>
+                <div className="flex items-center gap-1.5">🧪 <span>물약 GET → 더블점프 8초</span></div>
+                <div className="flex items-center gap-1.5">👻 <span>유령배지 → 무적 5초</span></div>
                 <div className="flex items-center gap-1.5">🏆 <span>상위 20% → 팝업 초대장!</span></div>
               </div>
             </div>

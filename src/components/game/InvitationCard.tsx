@@ -61,14 +61,14 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
 
   if (!isTop20) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 text-center w-full border border-amber-100">
-        <p className="text-3xl mb-2">🏃</p>
-        <p className="text-lg sm:text-xl font-bold text-gray-800 mb-1">{score}m 달성!</p>
-        <p className="text-gray-500 text-sm mb-1">
+      <div className="rounded-2xl shadow-lg p-4 sm:p-6 text-center w-full border border-purple-800/50 bg-[#1a0a4e]/80">
+        <p className="text-3xl mb-2">👻</p>
+        <p className="text-lg sm:text-xl font-bold text-purple-100 mb-1">{score}m 달성!</p>
+        <p className="text-purple-400 text-sm mb-1">
           상위 {Math.round(percentile)}% 구간이에요.
         </p>
-        <p className="text-amber-600 font-semibold text-sm mb-4">
-          상위 20% 돌파하면 팝업 초대장이 발급됩니다!
+        <p className="text-purple-300 font-semibold text-sm mb-4">
+          상위 20% 돌파하면 팝업 초대장이 발급됩니다! 🎃
         </p>
         <button
           onClick={shareKakao}
@@ -86,27 +86,27 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       <div
         ref={cardRef}
         className="w-full rounded-3xl overflow-hidden shadow-2xl"
-        style={{ background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #2e1065 50%, #4c1d95 100%)' }}
       >
         <div className="p-5 sm:p-8 text-center">
-          <div className="text-4xl sm:text-5xl mb-2">🐰</div>
-          <p className="text-xs font-bold tracking-widest text-amber-700 mb-1">FILLUMINATE × 누누씨</p>
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-1">팝업 초대장</h2>
-          <p className="text-xs sm:text-sm text-amber-800 mb-3">오프라인 팝업 스토어 입장 초대</p>
+          <div className="text-4xl sm:text-5xl mb-2">👻</div>
+          <p className="text-xs font-bold tracking-widest text-purple-300 mb-1">FILLUMINATE × 누누씨 납량특집</p>
+          <h2 className="text-xl sm:text-2xl font-black text-white mb-1">팝업 초대장</h2>
+          <p className="text-xs sm:text-sm text-purple-300 mb-3">오프라인 팝업 스토어 입장 초대 🎃</p>
 
-          <div className="bg-white bg-opacity-60 rounded-2xl p-3 sm:p-4 mb-3">
-            <p className="text-xs text-gray-500 mb-1">달성 기록</p>
-            <p className="text-2xl sm:text-3xl font-black text-gray-900">{score}m</p>
-            <p className="text-sm text-amber-700 font-bold">상위 {Math.round(percentile)}% 달성!</p>
+          <div className="bg-black/30 border border-purple-700/40 rounded-2xl p-3 sm:p-4 mb-3">
+            <p className="text-xs text-purple-400 mb-1">달성 기록</p>
+            <p className="text-2xl sm:text-3xl font-black text-white">{score}m</p>
+            <p className="text-sm text-purple-300 font-bold">상위 {Math.round(percentile)}% 달성!</p>
           </div>
 
-          <p className="text-xs font-bold mb-1" style={{ color: characterColor }}>{characterName}와 함께 달렸어요 🐰</p>
-          <p className="text-sm font-bold text-gray-800">{nickname}님을 초대합니다</p>
-          <p className="text-xs text-gray-500 mt-1">초대장 ID: {invitationId?.slice(0, 8).toUpperCase()}</p>
+          <p className="text-xs font-bold mb-1 text-purple-300">{characterName}와 함께 달렸어요 👻</p>
+          <p className="text-sm font-bold text-white">{nickname}님을 초대합니다</p>
+          <p className="text-xs text-purple-400 mt-1">초대장 ID: {invitationId?.slice(0, 8).toUpperCase()}</p>
         </div>
 
-        <div className="bg-amber-600 py-2 text-center">
-          <p className="text-white text-xs font-bold tracking-wider">마이웨이로 살아남은 당신 · 잘했어요 🎉</p>
+        <div className="bg-purple-900 py-2 text-center">
+          <p className="text-purple-200 text-xs font-bold tracking-wider">귀신에게서 살아남은 당신 · 대단해요 🌙</p>
         </div>
       </div>
 

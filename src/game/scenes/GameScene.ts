@@ -15,11 +15,11 @@ const OBSTACLE_TYPES = [
 const ITEM_TYPES = ['item_coffee', 'item_badge'] as const;
 
 const EVENT_MESSAGES = [
-  '부장님이 나타났다! 🧨',
-  '야근 확정!!! 😱',
-  '단톡 폭탄 투하 ㅠㅠ',
-  '월요병 발동...',
-  '칼퇴 실패 🔥',
+  '귀신이 나타났다! 👻',
+  '으스스한 밤... 😱',
+  '저기 뭔가 있어! 👁️',
+  '도망쳐어어어!!!',
+  '납량특집 발동! 🎃',
 ];
 
 export class GameScene extends Phaser.Scene {
@@ -172,20 +172,20 @@ export class GameScene extends Phaser.Scene {
 
     // ── UI ──
     const charDef = CHARACTERS.find(c => c.key === this.characterKey)!;
-    this.add.text(16, 14, charDef.name, {
-      fontSize: '14px', color: charDef.cssColor,
+    this.add.text(16, 14, `👻 ${charDef.name}`, {
+      fontSize: '14px', color: '#c4b5fd',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
     }).setDepth(20);
 
     this.scoreText = this.add.text(16, 32, '0m', {
-      fontSize: '26px', color: '#1f2937',
+      fontSize: '26px', color: '#e9d5ff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
     }).setDepth(20);
 
     this.eventText = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 70, '', {
-      fontSize: '30px', color: '#dc2626',
+      fontSize: '30px', color: '#f0abfc',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
-      stroke: '#ffffff', strokeThickness: 5,
+      stroke: '#1e1b4b', strokeThickness: 5,
     }).setOrigin(0.5).setDepth(30).setAlpha(0);
 
     // ── 입력 ──
@@ -320,12 +320,12 @@ export class GameScene extends Phaser.Scene {
 
     if (type === 'item_coffee') {
       this.maxJumps = 2;
-      this.showFloatingText('아아 GET! ☕ 더블점프!', 0x0ea5e9);
+      this.showFloatingText('물약 GET! 🧪 더블점프!', 0xa855f7);
       this.time.delayedCall(8000, () => { this.maxJumps = 1; });
     } else {
       this.isInvincible = true;
-      this.player.setTint(0xfbbf24);
-      this.showFloatingText('마이웨이! ⭐ 무적 5초!', 0xfbbf24);
+      this.player.setTint(0xa855f7);
+      this.showFloatingText('유령 배지! 👻 무적 5초!', 0xc4b5fd);
       // 무적 중 반짝임
       this.tweens.add({
         targets: this.player, alpha: 0.4, duration: 120,
@@ -351,17 +351,17 @@ export class GameScene extends Phaser.Scene {
 
     // 카메라 흔들림 + 오렌지 플래시
     this.cameras.main.shake(500, 0.02);
-    this.cameras.main.flash(600, 251, 146, 60);
+    this.cameras.main.flash(600, 76, 29, 149);
 
     // 🔥 하드모드 알림 텍스트
-    const lines = ['💥 1000m 돌파!', '하드모드 시작!'];
+    const lines = ['💀 1000m 돌파!', '공포 모드 시작!'];
     lines.forEach((line, i) => {
       const txt = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60 + i * 44, line, {
         fontSize: i === 0 ? '32px' : '26px',
-        color: i === 0 ? '#fb923c' : '#fbbf24',
+        color: i === 0 ? '#f0abfc' : '#c4b5fd',
         fontFamily: '"Nanum Gothic", sans-serif',
         fontStyle: 'bold',
-        stroke: '#ffffff',
+        stroke: '#1e1b4b',
         strokeThickness: 6,
       }).setOrigin(0.5).setDepth(35).setAlpha(0);
       this.tweens.add({
@@ -414,9 +414,9 @@ export class GameScene extends Phaser.Scene {
 
     this.score += (delta / 1000) * (this.speed / 9);
     const displayScore = Math.floor(this.score);
-    this.scoreText.setText(this.hardMode ? `🔥 ${displayScore}m` : `${displayScore}m`);
-    if (this.hardMode) this.scoreText.setColor('#fb923c');
-    else this.scoreText.setColor('#1f2937');
+    this.scoreText.setText(this.hardMode ? `💀 ${displayScore}m` : `👣 ${displayScore}m`);
+    if (this.hardMode) this.scoreText.setColor('#f0abfc');
+    else this.scoreText.setColor('#e9d5ff');
 
     // 1000m 하드모드 진입
     if (displayScore >= 1000 && !this.hardMode) this.activateHardMode();

@@ -13,6 +13,16 @@ export class BootScene extends Phaser.Scene {
     CHARACTERS.forEach(char => {
       this.load.image(`char_${char.key}`, `/characters/${char.key}.png`);
     });
+    // 실제 누누씨 자산 (장애물 / 아이템 / 장식)
+    this.load.image('obstacle_bomb', '/assets/ghost.png');     // 유령
+    this.load.image('obstacle_boss', '/assets/skull.png');     // 해골
+    this.load.image('obstacle_notif', '/assets/bat.png');      // 박쥐(공중)
+    this.load.image('item_coffee', '/assets/talisman.png');    // 부적(더블점프)
+    this.load.image('item_badge', '/assets/flame.png');        // 도깨비불(무적)
+    this.load.image('deco_bush1', '/assets/bush1.png');
+    this.load.image('deco_bush2', '/assets/bush2.png');
+    this.load.image('deco_candle', '/assets/candle.png');
+    this.load.image('deco_candle2', '/assets/candle_lit.png');
     this.load.on('loaderror', (file: { key: string }) => {
       this.loadErrors.add(file.key);
     });
@@ -119,154 +129,6 @@ export class BootScene extends Phaser.Scene {
     batGfx.fillCircle(48, 21, 2.5); batGfx.fillCircle(56, 21, 2.5);
     batGfx.generateTexture('cloud', 104, 40);
     batGfx.destroy();
-
-    // ── 장애물1: 유령 👻 ──
-    const ghost = this.make.graphics({ x: 0, y: 0 });
-    // 몸 (반투명 흰색)
-    ghost.fillStyle(0xe8e0ff, 0.92);
-    ghost.fillCircle(22, 18, 18);
-    ghost.fillRect(4, 18, 36, 22);
-    // 물결 아랫부분
-    ghost.fillCircle(10, 40, 8); ghost.fillCircle(22, 40, 8); ghost.fillCircle(34, 40, 8);
-    // 구멍 파기 (배경색)
-    ghost.fillStyle(0x0d0a2e, 1);
-    ghost.fillCircle(16, 40, 5); ghost.fillCircle(28, 40, 5);
-    // 눈
-    ghost.fillStyle(0x1e1b4b, 1);
-    ghost.fillEllipse(14, 17, 9, 11); ghost.fillEllipse(30, 17, 9, 11);
-    // 눈 하이라이트
-    ghost.fillStyle(0xffffff, 0.8);
-    ghost.fillCircle(16, 15, 2.5); ghost.fillCircle(32, 15, 2.5);
-    // 입 (작은 O)
-    ghost.fillStyle(0x1e1b4b, 1);
-    ghost.fillCircle(22, 26, 4);
-    // 반짝임
-    ghost.fillStyle(0xffffff, 0.5);
-    ghost.fillCircle(8, 10, 3); ghost.fillCircle(36, 8, 2);
-    ghost.generateTexture('obstacle_bomb', 44, 48);
-    ghost.destroy();
-
-    // ── 장애물2: 호박 🎃 ──
-    const pumpkin = this.make.graphics({ x: 0, y: 0 });
-    // 줄기
-    pumpkin.fillStyle(0x166534);
-    pumpkin.fillRoundedRect(15, 0, 8, 14, 3);
-    // 잎사귀
-    pumpkin.fillStyle(0x16a34a, 0.8);
-    pumpkin.fillEllipse(26, 6, 16, 8);
-    // 호박 몸통 (주황)
-    pumpkin.fillStyle(0xea580c);
-    pumpkin.fillEllipse(20, 44, 38, 48);
-    // 호박 골 (어두운 선)
-    pumpkin.fillStyle(0xc2410c, 0.5);
-    pumpkin.fillEllipse(10, 44, 14, 48);
-    pumpkin.fillEllipse(30, 44, 14, 48);
-    // 눈 (삼각형 - 무서운)
-    pumpkin.fillStyle(0x0d0a2e, 1);
-    pumpkin.fillTriangle(9, 34, 17, 34, 13, 42);
-    pumpkin.fillTriangle(23, 34, 31, 34, 27, 42);
-    // 코
-    pumpkin.fillTriangle(18, 44, 22, 44, 20, 48);
-    // 입 (지그재그)
-    pumpkin.fillRect(6, 52, 28, 4);
-    pumpkin.fillStyle(0xea580c, 1);
-    pumpkin.fillRect(10, 52, 4, 4); pumpkin.fillRect(18, 52, 4, 4); pumpkin.fillRect(26, 52, 4, 4);
-    // 눈 불빛
-    pumpkin.fillStyle(0xfbbf24, 0.6);
-    pumpkin.fillTriangle(9, 34, 17, 34, 13, 42);
-    pumpkin.fillTriangle(23, 34, 31, 34, 27, 42);
-    pumpkin.generateTexture('obstacle_boss', 40, 78);
-    pumpkin.destroy();
-
-    // ── 장애물3: 거미집 🕸️ (공중) ──
-    const web = this.make.graphics({ x: 0, y: 0 });
-    // 거미줄 배경 원
-    web.fillStyle(0x4c1d95, 0.15);
-    web.fillCircle(31, 28, 30);
-    // 거미줄 선 (방사형)
-    web.lineStyle(1.5, 0xc4b5fd, 0.7);
-    const cx = 31, cy = 28, wr = 29;
-    for (let a = 0; a < 8; a++) {
-      const angle = (a / 8) * Math.PI * 2;
-      web.lineBetween(cx, cy, cx + Math.cos(angle) * wr, cy + Math.sin(angle) * wr);
-    }
-    // 동심원 줄
-    [8, 16, 24].forEach(r => {
-      web.strokeCircle(cx, cy, r);
-    });
-    // 거미 (중앙)
-    web.fillStyle(0x1e1b4b, 0.95);
-    web.fillCircle(cx, cy, 6);
-    // 거미 다리
-    web.lineStyle(1.5, 0x1e1b4b, 0.8);
-    [[-1,-1],[-1.2,0],[-1,-1],[0.6,-1.2],[1.2,-0.6]].forEach(([dx, dy], i) => {
-      const ax = cx + dx * 10, ay = cy + dy * 10;
-      web.lineBetween(cx, cy, ax, ay);
-    });
-    // 눈
-    web.fillStyle(0xef4444, 1);
-    web.fillCircle(29, cy-1, 2); web.fillCircle(33, cy-1, 2);
-    web.generateTexture('obstacle_notif', 62, 56);
-    web.destroy();
-
-    // ── 아이템1: 마법 물약 🧪 ──
-    const potion = this.make.graphics({ x: 0, y: 0 });
-    // 코르크
-    potion.fillStyle(0x92400e);
-    potion.fillRoundedRect(10, 0, 12, 8, 2);
-    // 병 목
-    potion.fillStyle(0xc4b5fd, 0.9);
-    potion.fillRoundedRect(11, 7, 10, 8, 2);
-    // 병 몸통 (보라 물약)
-    potion.fillStyle(0x7c3aed, 0.95);
-    potion.fillEllipse(16, 26, 26, 28);
-    // 물약 색 레이어
-    potion.fillStyle(0xa855f7, 0.6);
-    potion.fillEllipse(16, 22, 24, 18);
-    // 기포
-    potion.fillStyle(0xffffff, 0.5);
-    potion.fillCircle(10, 24, 3); potion.fillCircle(20, 20, 2); potion.fillCircle(14, 30, 2);
-    // 반짝임
-    potion.fillStyle(0xe9d5ff, 0.7);
-    potion.fillEllipse(10, 20, 6, 10);
-    // 별 반짝이
-    potion.fillStyle(0xfbbf24, 0.9);
-    potion.fillCircle(28, 8, 3);
-    potion.fillRect(26, 5, 4, 2); potion.fillRect(27, 4, 2, 4);
-    potion.generateTexture('item_coffee', 32, 38);
-    potion.destroy();
-
-    // ── 아이템2: 유령 배지 ──
-    const badge = this.make.graphics({ x: 0, y: 0 });
-    // 별 외곽 (보라)
-    badge.fillStyle(0x7c3aed);
-    const ov: {x:number;y:number}[] = [];
-    for (let i = 0; i < 10; i++) {
-      const r = i % 2 === 0 ? 17 : 7;
-      const a = (Math.PI / 5) * i - Math.PI / 2;
-      ov.push({ x: 18 + r * Math.cos(a), y: 18 + r * Math.sin(a) });
-    }
-    badge.fillPoints(ov, true);
-    // 별 내부 (연보라)
-    badge.fillStyle(0xa855f7);
-    const iv: {x:number;y:number}[] = [];
-    for (let i = 0; i < 10; i++) {
-      const r = i % 2 === 0 ? 12 : 5;
-      const a = (Math.PI / 5) * i - Math.PI / 2;
-      iv.push({ x: 18 + r * Math.cos(a), y: 18 + r * Math.sin(a) });
-    }
-    badge.fillPoints(iv, true);
-    // 유령 미니 아이콘
-    badge.fillStyle(0xffffff, 0.9);
-    badge.fillCircle(18, 16, 5);
-    badge.fillRect(13, 16, 10, 6);
-    badge.fillCircle(15, 22, 3); badge.fillCircle(21, 22, 3);
-    badge.fillStyle(0x7c3aed, 1);
-    badge.fillCircle(14, 22, 2); badge.fillCircle(22, 22, 2);
-    badge.fillStyle(0x1e1b4b, 1);
-    badge.fillCircle(16, 15, 1.5); badge.fillCircle(20, 15, 1.5);
-    badge.generateTexture('item_badge', 36, 36);
-    badge.destroy();
 
     // ── 먼지 파티클 (보라 계열) ──
     const dustGfx = this.make.graphics({ x: 0, y: 0 });

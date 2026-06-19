@@ -23,7 +23,7 @@ export default function KakaoLogin({ onLogin }: Props) {
             <img
               src={`/characters/${c.key}.png`}
               alt={c.name}
-              className={`${c.size} rounded-full object-cover border-4 ${c.border} shadow-md ${i === 1 ? 'mb-1' : ''}`}
+              className={`${c.size} object-contain drop-shadow-md ${i === 1 ? '-mb-1 scale-110' : ''}`}
             />
             <span className={`text-[11px] font-bold ${c.label}`}>{c.name}</span>
           </div>
@@ -31,7 +31,10 @@ export default function KakaoLogin({ onLogin }: Props) {
       </div>
 
       <div className="text-center">
-        <h2 className="text-xl font-black text-gray-900 mb-1">누누씨 귀신의 집?!</h2>
+        <div className="flex items-center justify-center gap-1 mb-2">
+          <img src="/assets/tag_nunusee.png" alt="누누씨" className="h-14 object-contain drop-shadow" />
+          <img src="/assets/sign_haunted.png" alt="귀신의 집?!" className="h-12 object-contain drop-shadow" />
+        </div>
         <p className="text-gray-500 text-sm leading-relaxed">랭킹 등록 및 초대장 발급을 위해<br />카카오 로그인이 필요합니다</p>
       </div>
 

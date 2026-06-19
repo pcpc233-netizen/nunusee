@@ -50,6 +50,7 @@ export class GameScene extends Phaser.Scene {
   private clouds: Phaser.GameObjects.Image[] = [];
   private buildings: Phaser.GameObjects.Image[] = [];
   private speedLines: Phaser.GameObjects.Image[] = [];
+  private decor: Phaser.GameObjects.Image[] = [];
 
   private obstacleTimer!: Phaser.Time.TimerEvent;
   private itemTimer!: Phaser.Time.TimerEvent;
@@ -94,6 +95,18 @@ export class GameScene extends Phaser.Scene {
     // 지면
     this.add.tileSprite(GAME_WIDTH / 2, GROUND_Y + (GAME_HEIGHT - GROUND_Y) / 2,
       GAME_WIDTH, GAME_HEIGHT - GROUND_Y, 'ground');
+
+    // 바닥 장식 (촛불/덤불) — 지나가는 배경처럼 스크롤
+    const decoDefs: { key: string; h: number }[] = [
+      { key: 'deco_candle2', h: 46 }, { key: 'deco_bush2', h: 60 },
+      { key: 'deco_candle', h: 42 }, { key: 'deco_bush1', h: 54 },
+    ];
+    this.decor = decoDefs.map((d, i) => {
+      const img = this.add.image(220 + i * 200, GROUND_Y - 2, d.key).setOrigin(0.5, 1).setDepth(6);
+      const r = img.width / img.height || 1;
+      img.setDisplaySize(d.h * r, d.h);
+      return img;
+    });
 
     // 속도선 (공중에 뜨는 흰 선)
     this.speedLines = Array.from({ length: 6 }, (_) =>
@@ -262,6 +275,7 @@ export class GameScene extends Phaser.Scene {
     const type = OBSTACLE_TYPES[Phaser.Math.Between(0, OBSTACLE_TYPES.length - 1)];
     const y = GROUND_Y - type.h / 2 + type.yOff;
     const obs = this.obstacles.create(GAME_WIDTH + type.w / 2, y, type.key) as Phaser.Physics.Arcade.Image;
+    this.fitByHeight(obs, type.h);
     obs.setVelocityX(-this.speed);
     if (obs.body) (obs.body as Phaser.Physics.Arcade.Body).allowGravity = false;
     obs.setDepth(8);
@@ -274,6 +288,7 @@ export class GameScene extends Phaser.Scene {
         const type2 = OBSTACLE_TYPES[Phaser.Math.Between(0, OBSTACLE_TYPES.length - 1)];
         const y2 = GROUND_Y - type2.h / 2 + type2.yOff;
         const obs2 = this.obstacles.create(GAME_WIDTH + type2.w / 2, y2, type2.key) as Phaser.Physics.Arcade.Image;
+        this.fitByHeight(obs2, type2.h);
         obs2.setVelocityX(-this.speed);
         if (obs2.body) (obs2.body as Phaser.Physics.Arcade.Body).allowGravity = false;
         obs2.setDepth(8);
@@ -287,11 +302,18 @@ export class GameScene extends Phaser.Scene {
     const key = ITEM_TYPES[Phaser.Math.Between(0, ITEM_TYPES.length - 1)];
     const y = GROUND_Y - 90 - Phaser.Math.Between(0, 50);
     const item = this.items.create(GAME_WIDTH + 30, y, key) as Phaser.Physics.Arcade.Image;
+    this.fitByHeight(item, 50);
     item.setVelocityX(-this.speed);
     if (item.body) (item.body as Phaser.Physics.Arcade.Body).allowGravity = false;
     item.setData('type', key);
     item.setDepth(8);
     this.tweens.add({ targets: item, y: y - 14, duration: 550, yoyo: true, repeat: -1 });
+  }
+
+  // 텍스처를 비율 유지하며 목표 높이로 표시 (히트박스 = 보이는 크기)
+  private fitByHeight(img: Phaser.Physics.Arcade.Image, targetH: number) {
+    const r = img.width / img.height || 1;
+    img.setDisplaySize(targetH * r, targetH);
   }
 
   // ─── 충돌 ───
@@ -328,7 +350,7 @@ export class GameScene extends Phaser.Scene {
 
     if (type === 'item_coffee') {
       this.maxJumps = 2;
-      this.showFloatingText('물약 GET! 🧪 더블점프!', 0xa855f7);
+      this.showFloatingText('부적 GET! 🧧 더블점프!', 0xfbbf24);
       // 기존 타이머 취소 후 새로 시작
       if (this.coffeeTimer) { this.coffeeTimer.remove(); this.coffeeTimer = null; }
       this.coffeeTimer = this.time.delayedCall(8000, () => {
@@ -337,8 +359,8 @@ export class GameScene extends Phaser.Scene {
       });
     } else {
       this.isInvincible = true;
-      this.player.setTint(0xa855f7);
-      this.showFloatingText('유령 배지! 👻 무적 5초!', 0xc4b5fd);
+      this.player.setTint(0x60a5fa);
+      this.showFloatingText('도깨비불! 🔥 무적 5초!', 0x93c5fd);
       // 기존 타이머 취소 후 새로 시작
       if (this.badgeTimer) { this.badgeTimer.remove(); this.badgeTimer = null; }
       // 무적 중 반짝임
@@ -465,6 +487,10 @@ export class GameScene extends Phaser.Scene {
     this.buildings.forEach((b, i) => {
       b.x -= (this.speed * 0.015 * (i * 0.2 + 0.5)) * (delta / 1000);
       if (b.x < -90) b.x = GAME_WIDTH + 90;
+    });
+    this.decor.forEach((d) => {
+      d.x -= this.speed * (delta / 1000);
+      if (d.x < -60) d.x = GAME_WIDTH + Phaser.Math.Between(60, 260);
     });
 
     // 화면 밖 오브젝트 제거

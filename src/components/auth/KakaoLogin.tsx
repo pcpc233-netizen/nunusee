@@ -10,7 +10,12 @@ const CHARS = [
 
 export default function KakaoLogin({ onLogin }: Props) {
   return (
-    <div className="flex flex-col items-center gap-5 py-10 px-4">
+    <div className="flex flex-col items-center gap-4 py-10 px-4">
+      {/* F.ILLUMINATE 브랜드 */}
+      <p className="font-serif font-black tracking-tight text-[#a01b2e] text-xl leading-none">
+        F.ILLUMINATE<span className="text-[10px] align-super">®</span>
+      </p>
+
       {/* 누누씨 삼자매 */}
       <div className="flex items-end justify-center gap-3">
         {CHARS.map((c, i) => (

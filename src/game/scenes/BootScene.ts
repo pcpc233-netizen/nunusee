@@ -290,7 +290,19 @@ export class BootScene extends Phaser.Scene {
     });
 
     const characterKey = this.registry.get('characterKey') ?? CHARACTERS[0].key;
-    this.scene.start('GameScene', { characterKey });
+
+    // 분필 폰트(Rock Salt) 로드 보장 후 게임 시작 — 캔버스 텍스트는 렌더 시점에 폰트가 있어야 함
+    this.ensureFonts().finally(() => {
+      this.scene.start('GameScene', { characterKey });
+    });
+  }
+
+  private ensureFonts(): Promise<unknown> {
+    const fontsApi = (document as Document & { fonts?: { load: (f: string) => Promise<unknown> } }).fonts;
+    if (!fontsApi?.load) return Promise.resolve();
+    // 최대 1.5초만 대기 (네트워크 지연 시 폴백 폰트로 진행)
+    const timeout = new Promise((res) => setTimeout(res, 1500));
+    return Promise.race([fontsApi.load("700 24px 'Rock Salt'"), timeout]);
   }
 
   private generateFallbackChar(key: string, bodyColor: number, earColor: number) {

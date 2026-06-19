@@ -30,58 +30,37 @@ export class GameOverScene extends Phaser.Scene {
     ghostDeco(680, 60, 1.5, 0.06);
     ghostDeco(400, 320, 0.9, 0.07);
 
-    // 캐릭터 이미지 (유령처럼 떠있는 느낌)
-    const charImg = this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 10, `char_${this.characterKey}`);
-    charImg.setScale(0.38).setAlpha(0.9);
-    this.tweens.add({
-      targets: charImg,
-      alpha: { from: 0, to: 0.9 },
-      y: { from: GAME_HEIGHT / 2 + 40, to: GAME_HEIGHT / 2 - 10 },
-      duration: 500,
-      ease: 'Back.easeOut',
-    });
-    // 유령처럼 위아래 둥실둥실
-    this.tweens.add({
-      targets: charImg,
-      y: charImg.y - 12,
-      duration: 1200,
-      yoyo: true,
-      repeat: -1,
-      ease: 'Sine.easeInOut',
-      delay: 600,
-    });
-
-    // 으악 텍스트
-    this.add.text(GAME_WIDTH / 2, 40, '으악 ㅠㅠ 잡혔다!', {
-      fontSize: '18px', color: '#c4b5fd',
+    // 으악 텍스트 (상단)
+    this.add.text(GAME_WIDTH / 2, 26, '으악 ㅠㅠ 잡혔다!', {
+      fontSize: '16px', color: '#c4b5fd',
       fontFamily: '"Nanum Gothic", sans-serif',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(20);
 
-    // 빨간 호러 GAME OVER (살짝 기울여 손글씨 느낌)
-    this.add.text(GAME_WIDTH / 2, 92, 'GAME OVER', {
-      fontSize: '52px', color: '#e11d48',
-      fontFamily: '"Nanum Gothic", sans-serif',
-      fontStyle: 'bold',
-      stroke: '#3b0a0a', strokeThickness: 9,
-    }).setOrigin(0.5).setAngle(-3).setDepth(20);
+    // 점수 (흰색, 목업처럼 깔끔하게)
+    this.add.text(GAME_WIDTH / 2, 58, `${score}m`, {
+      fontSize: '32px', color: '#ffffff',
+      fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
+      stroke: '#1e1b4b', strokeThickness: 4,
+    }).setOrigin(0.5).setDepth(20);
 
-    // 점수
-    this.add.text(GAME_WIDTH / 2, 150, `🌙 ${score}m 달렸어요!`, {
-      fontSize: '24px', color: '#e9d5ff',
-      fontFamily: '"Nanum Gothic", sans-serif',
-      fontStyle: 'bold',
+    // 빨간 분필 GAME OVER (2줄)
+    this.add.text(GAME_WIDTH / 2, 158, 'GAME\nOVER', {
+      fontSize: '50px', color: '#e4002b',
+      fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
+      align: 'center', stroke: '#3b0a0a', strokeThickness: 6,
+      lineSpacing: -10,
     }).setOrigin(0.5).setDepth(20);
 
     // ── 나무 간판 버튼 (RETRY / RANK) ──
-    const retry = this.makeWoodSign(GAME_WIDTH / 2 - 120, GAME_HEIGHT - 64, 210, 52, 'RETRY');
-    const rank = this.makeWoodSign(GAME_WIDTH / 2 + 120, GAME_HEIGHT - 64, 210, 52, 'RANK');
+    const retry = this.makeWoodSign(GAME_WIDTH / 2 - 125, GAME_HEIGHT - 56, 220, 56, 'RETRY');
+    const rank = this.makeWoodSign(GAME_WIDTH / 2 + 125, GAME_HEIGHT - 56, 220, 56, 'RANK');
 
     retry.on('pointerdown', this.restart, this);
     rank.on('pointerdown', () => this.game.events.emit('gorank'), this);
 
     // 힌트 텍스트
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 22, '스페이스 / 화면 탭으로도 재시작', {
-      fontSize: '12px', color: '#7c6aad',
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 16, '스페이스 / 화면 탭으로도 재시작', {
+      fontSize: '11px', color: '#7c6aad',
       fontFamily: '"Nanum Gothic", sans-serif',
     }).setOrigin(0.5).setDepth(20);
 
@@ -92,30 +71,51 @@ export class GameOverScene extends Phaser.Scene {
     this.input.keyboard?.once('keydown-SPACE', this.restart, this);
   }
 
-  // ── 나무 간판 스타일 버튼 ──
+  // ── 나무 간판 스타일 버튼 (글로우 + 코너 브래킷 + 분필 텍스트) ──
   private makeWoodSign(x: number, y: number, w: number, h: number, label: string) {
+    const left = x - w / 2;
+    const top = y - h / 2;
     const g = this.add.graphics().setDepth(20);
+
     const draw = (fill: number) => {
       g.clear();
-      g.fillStyle(0x5b3413, 1);                       // 나무 테두리(어두운 갈색)
-      g.fillRoundedRect(x - w / 2 - 4, y - h / 2 - 4, w + 8, h + 8, 12);
-      g.fillStyle(fill, 1);                           // 간판 본체(노란 나무)
-      g.fillRoundedRect(x - w / 2, y - h / 2, w, h, 10);
-      g.fillStyle(0xffffff, 0.18);                    // 윗면 하이라이트
-      g.fillRoundedRect(x - w / 2 + 6, y - h / 2 + 5, w - 12, h / 2 - 6, 8);
+      // 글로우 (라벤더 소프트)
+      g.fillStyle(0xe9d5ff, 0.12);
+      g.fillRoundedRect(left - 10, top - 10, w + 20, h + 20, 18);
+      // 간판 본체 (노란 나무)
+      g.fillStyle(fill, 1);
+      g.fillRoundedRect(left, top, w, h, 12);
+      // 아래쪽 음영 (입체감)
+      g.fillStyle(0xd99a06, 0.45);
+      g.fillRoundedRect(left, top + h * 0.62, w, h * 0.38, 12);
+      // 윗면 하이라이트
+      g.fillStyle(0xffffff, 0.22);
+      g.fillRoundedRect(left + 6, top + 5, w - 12, h * 0.34, 8);
+      // 마룬 코너 브래킷 (못/장식 느낌)
+      g.lineStyle(3, 0x8a2b1a, 0.9);
+      const m = 12, len = 15;
+      const bracket = (cx: number, cy: number, dx: number, dy: number) => {
+        g.beginPath();
+        g.moveTo(cx, cy + dy * len);
+        g.lineTo(cx, cy);
+        g.lineTo(cx + dx * len, cy);
+        g.strokePath();
+      };
+      bracket(left + m, top + m, 1, 1);             // TL
+      bracket(left + w - m, top + m, -1, 1);        // TR
+      bracket(left + m, top + h - m, 1, -1);        // BL
+      bracket(left + w - m, top + h - m, -1, -1);   // BR
     };
-    draw(0xf2b705);
+    draw(0xf5c518);
 
-    this.add.text(x, y, label, {
-      fontSize: '26px', color: '#7c2d12',
-      fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
-      stroke: '#fde68a', strokeThickness: 3,
+    const txt = this.add.text(x, y - 2, label, {
+      fontSize: '24px', color: '#8a2b1a',
+      fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
     }).setOrigin(0.5).setDepth(21);
 
-    const zone = this.add.zone(x, y, w + 8, h + 8)
-      .setInteractive({ useHandCursor: true });
-    zone.on('pointerover', () => draw(0xfcd34d));
-    zone.on('pointerout', () => draw(0xf2b705));
+    const zone = this.add.zone(x, y, w, h).setInteractive({ useHandCursor: true });
+    zone.on('pointerover', () => { draw(0xfcd34d); txt.setScale(1.06); });
+    zone.on('pointerout', () => { draw(0xf5c518); txt.setScale(1); });
     return zone;
   }
 

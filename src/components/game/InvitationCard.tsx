@@ -91,7 +91,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       >
         <div className="p-5 sm:p-8 text-center">
           <div className="text-4xl sm:text-5xl mb-2">👻</div>
-          <p className="text-xs font-bold tracking-widest text-purple-300 mb-1">FILLUMINATE × 누누씨 귀신의 집</p>
+          <p className="text-xs font-bold tracking-widest text-purple-300 mb-1">F.ILLUMINATE® × 누누씨 귀신의 집</p>
           <h2 className="text-xl sm:text-2xl font-black text-white mb-1">팝업 초대장</h2>
           <p className="text-xs sm:text-sm text-purple-300 mb-3">오프라인 팝업 스토어 입장 초대 🎃</p>
 

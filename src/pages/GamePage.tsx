@@ -28,7 +28,7 @@ export default function GamePage() {
           <div className="flex items-center gap-2">
             <img src="/characters/deokhee.png" alt="누누씨" className="w-9 h-9 rounded-full object-cover border-2 border-purple-500/50 shadow-sm shadow-purple-500/30" />
             <div>
-              <p className="font-black text-purple-100 text-sm leading-tight">👻 덕희의 납량특집런</p>
+              <p className="font-black text-purple-100 text-sm leading-tight">🎃 누누씨 귀신의 집?!</p>
               <p className="text-xs text-purple-400">FILLUMINATE × 누누씨</p>
             </div>
           </div>
@@ -53,8 +53,8 @@ export default function GamePage() {
 
       {/* Hero banner */}
       <div className="bg-gradient-to-r from-purple-900 to-violet-900 py-4 sm:py-6 text-center border-b border-purple-700/30">
-        <p className="text-purple-100 font-black text-base sm:text-lg">👻 귀신에게서 살아남아라!</p>
-        <p className="text-purple-400 text-xs sm:text-sm mt-1">🎃 납량특집 · 상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
+        <p className="text-purple-100 font-black text-base sm:text-lg">👻 귀신의 집에서 살아남아라!</p>
+        <p className="text-purple-400 text-xs sm:text-sm mt-1">🎃 상위 20% 달성 시 오프라인 팝업 초대장 발급</p>
       </div>
 
       {/* Tab navigation */}
@@ -87,7 +87,7 @@ export default function GamePage() {
             </div>
 
             {isLoggedIn ? (
-              <GameWrapper userId={effectiveUserId} nickname={nickname} />
+              <GameWrapper userId={effectiveUserId} nickname={nickname} onGoRank={() => setTab('leaderboard')} />
             ) : (
               <div className="bg-white rounded-3xl shadow-lg w-full max-w-md">
                 <KakaoLogin onLogin={signInWithKakao} />

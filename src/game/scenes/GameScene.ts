@@ -19,7 +19,7 @@ const EVENT_MESSAGES = [
   '으스스한 밤... 😱',
   '저기 뭔가 있어! 👁️',
   '도망쳐어어어!!!',
-  '납량특집 발동! 🎃',
+  '귀신의 집이 깨어났다! 🎃',
 ];
 
 export class GameScene extends Phaser.Scene {
@@ -173,16 +173,12 @@ export class GameScene extends Phaser.Scene {
     });
 
     // ── UI ──
-    const charDef = CHARACTERS.find(c => c.key === this.characterKey)!;
-    this.add.text(16, 14, `👻 ${charDef.name}`, {
-      fontSize: '14px', color: '#c4b5fd',
+    // 점수: 목업처럼 상단 중앙 흰색 표시
+    this.scoreText = this.add.text(GAME_WIDTH / 2, 28, '0m', {
+      fontSize: '34px', color: '#ffffff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
-    }).setDepth(20);
-
-    this.scoreText = this.add.text(16, 32, '0m', {
-      fontSize: '26px', color: '#e9d5ff',
-      fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
-    }).setDepth(20);
+      stroke: '#1e1b4b', strokeThickness: 5,
+    }).setOrigin(0.5, 0).setDepth(20);
 
     this.eventText = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 70, '', {
       fontSize: '30px', color: '#f0abfc',
@@ -436,9 +432,8 @@ export class GameScene extends Phaser.Scene {
 
     this.score += (delta / 1000) * (this.speed / 9);
     const displayScore = Math.floor(this.score);
-    this.scoreText.setText(this.hardMode ? `💀 ${displayScore}m` : `👣 ${displayScore}m`);
-    if (this.hardMode) this.scoreText.setColor('#f0abfc');
-    else this.scoreText.setColor('#e9d5ff');
+    this.scoreText.setText(`${displayScore}m`);
+    this.scoreText.setColor(this.hardMode ? '#f87171' : '#ffffff');
 
     // 1000m 하드모드 진입
     if (displayScore >= 1000 && !this.hardMode) this.activateHardMode();

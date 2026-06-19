@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './types';
 
+// env 우선, 없으면 fallback (anon 키·URL은 공개값 — 브라우저 번들에 어차피 노출됨)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://gibqdecjcdyeyxtknbok.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYnFkZWNqY2R5ZXl4dGtuYm9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI3NTMwNzksImV4cCI6MjA3ODMyOTA3OX0.zstQH1P-4pPb2y74LhrH3uSws9I_KkQ55mPRAR0up84';
 

@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 
 const GUEST_ID = 'guest-test-user';
 const GUEST_NICKNAMES = ['테스트토끼', '익명덕춘', '게스트덕자', '임시덕희'];
-const KAKAO_REST_KEY = '59cc028d28edb52a0ff9669873b10753';
-const REDIRECT_URI = 'https://calcmoum.com';
+// REST 키는 OAuth authorize URL에 노출되는 공개값(client_id) — env 우선, fallback 허용
+const KAKAO_REST_KEY = import.meta.env.VITE_KAKAO_REST_KEY || '59cc028d28edb52a0ff9669873b10753';
+const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI || 'https://calcmoum.com';
 
 interface KakaoUser {
   id: string;

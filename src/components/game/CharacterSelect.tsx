@@ -92,8 +92,8 @@ export default function CharacterSelect({ onSelect }: Props) {
 
       <button
         onClick={() => onSelect(selected)}
-        className="w-full py-3 sm:py-4 rounded-2xl font-black text-white text-base sm:text-lg shadow-lg transition-all hover:scale-105 active:scale-95"
-        style={{ backgroundColor: selected.cssColor }}
+        className="w-full py-3 sm:py-4 rounded-2xl font-black text-amber-900 text-base sm:text-lg shadow-lg transition-all hover:scale-105 active:scale-95 bg-gradient-to-b from-amber-300 to-amber-500 border-4 border-amber-800"
+        style={{ textShadow: '0 1px 0 rgba(255,255,255,0.4)' }}
       >
         {selected.name}{korParticle(selected.name, '로', '으로')} 시작하기 🏃
       </button>

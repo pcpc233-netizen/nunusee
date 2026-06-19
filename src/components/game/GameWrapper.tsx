@@ -10,11 +10,12 @@ import InvitationCard from './InvitationCard';
 interface Props {
   userId: string;
   nickname: string;
+  onGoRank?: () => void;
 }
 
 type Phase = 'select' | 'playing';
 
-export default function GameWrapper({ userId, nickname }: Props) {
+export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<Phaser.Game | null>(null);
@@ -27,6 +28,10 @@ export default function GameWrapper({ userId, nickname }: Props) {
     invitationId: string | null;
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // 최신 onGoRank 참조 (effect 재실행 없이 콜백만 갱신)
+  const onGoRankRef = useRef(onGoRank);
+  onGoRankRef.current = onGoRank;
 
   // Start game after character selected
   useEffect(() => {
@@ -62,13 +67,16 @@ export default function GameWrapper({ userId, nickname }: Props) {
     };
 
     const handleRestart = () => setResult(null);
+    const handleGoRank = () => onGoRankRef.current?.();
 
     game.events.on('gameover', handleGameOver);
     game.events.on('restart', handleRestart);
+    game.events.on('gorank', handleGoRank);
 
     return () => {
       game.events.off('gameover', handleGameOver);
       game.events.off('restart', handleRestart);
+      game.events.off('gorank', handleGoRank);
       game.destroy(true);
       gameRef.current = null;
     };

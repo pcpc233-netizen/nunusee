@@ -10,9 +10,10 @@ interface Props {
   invitationId: string | null;
 }
 
-const KAKAO_JS_KEY = 'db9ebf037297e945b576c801ffb12acf';
-const SITE_URL = 'https://calcmoum.com';
-const OG_IMAGE = 'https://calcmoum.com/characters/deokhee.png';
+// JS 키는 도메인 제한된 공개키 — env 우선, fallback 허용
+const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY || 'db9ebf037297e945b576c801ffb12acf';
+const SITE_URL = import.meta.env.VITE_APP_ORIGIN || 'https://calcmoum.com';
+const OG_IMAGE = `${SITE_URL}/characters/deokhee.png`;
 
 function initKakao() {
   if (window.Kakao && !window.Kakao.isInitialized()) {
@@ -25,8 +26,8 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
 
   const shareKakao = () => {
     const msg = isTop20
-      ? `${nickname}님이 덕희의 마이웨이런에서 ${score}m를 달렸어요! 상위 ${Math.round(percentile)}%로 팝업 초대장을 받았습니다 🐰`
-      : `${nickname}님이 덕희의 마이웨이런에서 ${score}m를 달렸어요! 도전해보세요 🏃`;
+      ? `${nickname}님이 누누씨 귀신의 집?!에서 ${score}m를 달렸어요! 상위 ${Math.round(percentile)}%로 팝업 초대장을 받았습니다 🐰`
+      : `${nickname}님이 누누씨 귀신의 집?!에서 ${score}m를 달렸어요! 도전해보세요 🏃`;
 
     initKakao();
 
@@ -34,7 +35,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       window.Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
-          title: '덕희의 마이웨이런 🐰',
+          title: '누누씨 귀신의 집?! 👻',
           description: msg,
           imageUrl: OG_IMAGE,
           link: { mobileWebUrl: SITE_URL, webUrl: SITE_URL },
@@ -48,7 +49,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
         template_object: {
           object_type: 'feed',
           content: {
-            title: '덕희의 마이웨이런 🐰',
+            title: '누누씨 귀신의 집?! 👻',
             description: msg,
             image_url: OG_IMAGE,
             link: { web_url: SITE_URL, mobile_web_url: SITE_URL },
@@ -90,7 +91,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
       >
         <div className="p-5 sm:p-8 text-center">
           <div className="text-4xl sm:text-5xl mb-2">👻</div>
-          <p className="text-xs font-bold tracking-widest text-purple-300 mb-1">FILLUMINATE × 누누씨 납량특집</p>
+          <p className="text-xs font-bold tracking-widest text-purple-300 mb-1">FILLUMINATE × 누누씨 귀신의 집</p>
           <h2 className="text-xl sm:text-2xl font-black text-white mb-1">팝업 초대장</h2>
           <p className="text-xs sm:text-sm text-purple-300 mb-3">오프라인 팝업 스토어 입장 초대 🎃</p>
 
@@ -120,7 +121,7 @@ export default function InvitationCard({ score, nickname, characterName = '덕�
         </button>
         <button
           onClick={() => {
-            const text = `덕희의 마이웨이런 ${score}m · 상위 ${Math.round(percentile)}% · 초대장 ID: ${invitationId?.slice(0, 8).toUpperCase()}`;
+            const text = `누누씨 귀신의 집?! ${score}m · 상위 ${Math.round(percentile)}% · 초대장 ID: ${invitationId?.slice(0, 8).toUpperCase()}`;
             navigator.clipboard.writeText(text).then(() => alert('초대장 정보 복사됨!'));
           }}
           className="w-full sm:flex-1 py-3 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors text-sm"

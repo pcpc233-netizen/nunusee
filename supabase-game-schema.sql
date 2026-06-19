@@ -1,4 +1,4 @@
--- 덕희의 마이웨이 런 — Supabase 스키마
+-- 누누씨 귀신의 집?! — Supabase 스키마
 -- Supabase SQL Editor에서 실행하세요
 
 -- 점수 테이블

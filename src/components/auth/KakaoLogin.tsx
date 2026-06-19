@@ -26,7 +26,7 @@ export default function KakaoLogin({ onLogin }: Props) {
       </div>
 
       <div className="text-center">
-        <h2 className="text-xl font-black text-gray-900 mb-1">덕희의 마이웨이런</h2>
+        <h2 className="text-xl font-black text-gray-900 mb-1">누누씨 귀신의 집?!</h2>
         <p className="text-gray-500 text-sm leading-relaxed">랭킹 등록 및 초대장 발급을 위해<br />카카오 로그인이 필요합니다</p>
       </div>
 

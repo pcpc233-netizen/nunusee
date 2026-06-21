@@ -14,9 +14,9 @@ export class BootScene extends Phaser.Scene {
       this.load.image(`char_${char.key}`, `/characters/${char.key}.png`);
     });
     // 실제 누누씨 자산 (장애물 / 아이템 / 장식)
-    this.load.image('obstacle_bomb', '/assets/ghost.png');     // 유령
-    this.load.image('obstacle_boss', '/assets/skull.png');     // 해골
-    this.load.image('obstacle_notif', '/assets/bat.png');      // 박쥐(공중)
+    this.load.image('obstacle_bomb', '/assets/ghost.png');     // 흰 유령 (지상)
+    this.load.image('obstacle_boss', '/assets/monster.png');   // 청록 도깨비 (지상, 색 구분)
+    this.load.image('obstacle_notif', '/assets/bat.png');      // 검은 박쥐 (공중)
     this.load.image('item_coffee', '/assets/talisman.png');    // 부적(더블점프)
     this.load.image('item_badge', '/assets/flame.png');        // 도깨비불(무적)
     this.load.image('deco_bush1', '/assets/bush1.png');

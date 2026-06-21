@@ -33,23 +33,13 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   const onGoRankRef = useRef(onGoRank);
   onGoRankRef.current = onGoRank;
 
-  // 전체화면 상태 추적 (캔버스가 화면을 채우도록)
-  const [isFs, setIsFs] = useState(false);
+  // 플레이 중(결과 없음)에는 브라우저 뷰포트를 꽉 채움 (OS 전체화면 아님)
+  const immersive = phase === 'playing' && !result;
+  // 컨테이너 크기(전체 뷰포트 ↔ 일반)가 바뀌면 Phaser 캔버스 재맞춤
   useEffect(() => {
-    const onFsChange = () => {
-      setIsFs(!!document.fullscreenElement);
-      // 컨테이너 크기 변경 후 Phaser 캔버스 재맞춤
-      setTimeout(() => gameRef.current?.scale.refresh(), 60);
-    };
-    document.addEventListener('fullscreenchange', onFsChange);
-    document.addEventListener('webkitfullscreenchange', onFsChange as EventListener);
-    return () => {
-      document.removeEventListener('fullscreenchange', onFsChange);
-      document.removeEventListener('webkitfullscreenchange', onFsChange as EventListener);
-      // 언마운트 시 전체화면 해제
-      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
-    };
-  }, []);
+    const t = setTimeout(() => gameRef.current?.scale.refresh(), 80);
+    return () => clearTimeout(t);
+  }, [immersive]);
 
   // Start game after character selected
   useEffect(() => {
@@ -71,8 +61,6 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
 
     const handleGameOver = async (score: number) => {
       if (submitting) return;
-      // 게임오버 시 전체화면 해제 — 초대장/결과 카드가 보이도록
-      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
       setSubmitting(true);
       try {
         const res = await submitScore(userId, nickname, score);
@@ -105,34 +93,15 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   const handleCharacterSelect = (char: CharacterDef) => {
     setCharacter(char);
     setPhase('playing');
-    // 인게임 진입 시 전체화면 (캐릭터 선택 클릭 = 사용자 제스처)
-    requestFs();
   };
 
   const handleReselect = () => {
-    exitFs();
     if (gameRef.current) {
       gameRef.current.destroy(true);
       gameRef.current = null;
     }
     setResult(null);
     setPhase('select');
-  };
-
-  const requestFs = () => {
-    const el = document.documentElement as HTMLElement & {
-      webkitRequestFullscreen?: () => Promise<void>;
-    };
-    try {
-      (el.requestFullscreen?.() ?? el.webkitRequestFullscreen?.())?.catch(() => {});
-    } catch { /* 일부 브라우저 미지원 — 무시 */ }
-  };
-
-  const exitFs = () => {
-    const d = document as Document & { webkitExitFullscreen?: () => Promise<void> };
-    if (d.fullscreenElement || (d as unknown as { webkitFullscreenElement?: Element }).webkitFullscreenElement) {
-      try { (d.exitFullscreen?.() ?? d.webkitExitFullscreen?.())?.catch(() => {}); } catch { /* 무시 */ }
-    }
   };
 
   if (phase === 'select') {
@@ -144,13 +113,13 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   }
 
   return (
-    <div className={isFs
+    <div className={immersive
       ? 'fixed inset-0 z-[100] bg-[#0d0a2e] flex items-center justify-center'
       : 'flex flex-col items-center gap-4 w-full'}>
-      {/* Character badge (전체화면에선 상단 오버레이) */}
+      {/* Character badge (몰입 모드에선 상단 오버레이) */}
       <div
         className={`flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-bold shadow ${
-          isFs ? 'absolute top-2 left-1/2 -translate-x-1/2 z-10' : ''
+          immersive ? 'absolute top-2 left-1/2 -translate-x-1/2 z-10' : ''
         }`}
         style={{ backgroundColor: character.cssColor }}
       >
@@ -160,14 +129,14 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
           onClick={handleReselect}
           className="ml-2 text-white/70 hover:text-white underline text-xs"
         >
-          {isFs ? '나가기' : '바꾸기'}
+          {immersive ? '나가기' : '바꾸기'}
         </button>
       </div>
 
-      {/* Phaser canvas — 전체화면이면 화면 채움, 아니면 모바일 맞춤 */}
+      {/* Phaser canvas — 몰입 모드면 뷰포트 채움, 아니면 모바일 맞춤 */}
       <div
-        className={isFs ? 'overflow-hidden' : 'w-full rounded-2xl overflow-hidden shadow-2xl border-4'}
-        style={isFs
+        className={immersive ? 'overflow-hidden' : 'w-full rounded-2xl overflow-hidden shadow-2xl border-4'}
+        style={immersive
           ? { width: '100vw', height: '100vh' }
           : {
               borderColor: character.cssColor + '88',

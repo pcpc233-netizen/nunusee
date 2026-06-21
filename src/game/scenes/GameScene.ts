@@ -7,9 +7,9 @@ const CHAR_BODY_W = 58;           // 히트박스 너비 (px, 스케일 후)
 const CHAR_BODY_H = 70;           // 히트박스 높이
 
 const OBSTACLE_TYPES = [
-  { key: 'obstacle_bomb', w: 44, h: 48, yOff: 0 },
-  { key: 'obstacle_boss', w: 40, h: 78, yOff: 0 },
-  { key: 'obstacle_notif', w: 62, h: 56, yOff: -110 }, // 공중 장애물
+  { key: 'obstacle_bomb', w: 56, h: 60, yOff: 0 },     // 흰 유령 (지상)
+  { key: 'obstacle_boss', w: 76, h: 82, yOff: 0 },     // 청록 도깨비 (지상, 큼)
+  { key: 'obstacle_notif', w: 78, h: 52, yOff: -100 }, // 검은 박쥐 (공중)
 ] as const;
 
 const ITEM_TYPES = ['item_coffee', 'item_badge'] as const;

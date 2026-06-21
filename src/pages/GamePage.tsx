@@ -80,9 +80,10 @@ export default function GamePage() {
               <h3 className="font-bold text-purple-300 mb-2 text-sm">🎃 게임 방법</h3>
               <div className="grid grid-cols-2 gap-1.5 text-xs text-purple-400">
                 <div className="flex items-center gap-1.5">⌨️ <span>스페이스 / 화면 탭 → 점프</span></div>
-                <div className="flex items-center gap-1.5">🧪 <span>물약 GET → 더블점프 8초</span></div>
-                <div className="flex items-center gap-1.5">👻 <span>유령배지 → 무적 5초</span></div>
+                <div className="flex items-center gap-1.5">🧧 <span>부적 → 더블점프 8초</span></div>
+                <div className="flex items-center gap-1.5">🔥 <span>도깨비불 → 무적 5초</span></div>
                 <div className="flex items-center gap-1.5">🏆 <span>상위 20% → 팝업 초대장!</span></div>
+                <div className="flex items-center gap-1.5 col-span-2 text-purple-300">⚠️ <span>피하기: 👻유령 · 👹도깨비(지상) · 🦇박쥐(공중)</span></div>
               </div>
             </div>
 

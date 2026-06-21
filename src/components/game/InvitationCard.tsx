@@ -13,7 +13,7 @@ interface Props {
 // JS 키는 도메인 제한된 공개키 — env 우선, fallback 허용
 const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY || 'db9ebf037297e945b576c801ffb12acf';
 const SITE_URL = import.meta.env.VITE_APP_ORIGIN || 'https://calcmoum.com';
-const OG_IMAGE = `${SITE_URL}/characters/deokhee.png`;
+const OG_IMAGE = `${SITE_URL}/share_card.png`;
 
 function initKakao() {
   if (window.Kakao && !window.Kakao.isInitialized()) {

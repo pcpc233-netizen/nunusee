@@ -121,18 +121,15 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
         </button>
       </div>
 
-      {/* Phaser canvas — 화면 폭의 대부분을 쓰되 적당한 최대치(1040px)로 확대 (full-bleed) */}
-      <div className="relative left-1/2 -translate-x-1/2 w-screen flex justify-center px-2">
-        <div
-          className="rounded-2xl overflow-hidden shadow-2xl border-4"
-          style={{
-            borderColor: character.cssColor + '88',
-            width: 'min(96vw, 1040px)',
-            aspectRatio: `${GAME_WIDTH}/${GAME_HEIGHT}`,
-          }}
-        >
-          <div ref={containerRef} className="w-full h-full" />
-        </div>
+      {/* Phaser canvas — 부모 폭을 채워 중앙 정렬 (안정적, 리플레이해도 그대로) */}
+      <div
+        className="w-full mx-auto rounded-2xl overflow-hidden shadow-2xl border-4"
+        style={{
+          borderColor: character.cssColor + '88',
+          aspectRatio: `${GAME_WIDTH}/${GAME_HEIGHT}`,
+        }}
+      >
+        <div ref={containerRef} className="w-full h-full" />
       </div>
 
       {submitting && (

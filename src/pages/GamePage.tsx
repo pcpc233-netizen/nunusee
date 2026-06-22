@@ -58,7 +58,7 @@ export default function GamePage() {
       </div>
 
       {/* Tab navigation */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
         <div className="flex bg-purple-950/60 border border-purple-800/40 rounded-2xl p-1 shadow-sm mb-4 sm:mb-6 max-w-xs mx-auto">
           {(['game', 'leaderboard'] as Tab[]).map((t) => (
             <button

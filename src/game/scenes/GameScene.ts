@@ -135,8 +135,9 @@ export class GameScene extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
     this.player.setDepth(10);
 
-    // ── 지면 정적 바디 ──
-    const groundBlock = this.add.rectangle(GAME_WIDTH / 2, GROUND_Y + 5, GAME_WIDTH, 10);
+    // ── 지면 정적 바디 (두껍게 — 점프 후 빠른 낙하 시 얇은 바닥 관통 방지) ──
+    const floorH = GAME_HEIGHT - GROUND_Y;
+    const groundBlock = this.add.rectangle(GAME_WIDTH / 2, GROUND_Y + floorH / 2, GAME_WIDTH, floorH);
     this.physics.add.existing(groundBlock, true);
     this.physics.add.collider(this.player, groundBlock, this.onLand, undefined, this);
 
@@ -319,15 +320,9 @@ export class GameScene extends Phaser.Scene {
     img.setDisplaySize(targetH * r, targetH);
   }
 
-  // 배경/장식을 흐림+디밍 처리 (WebGL이면 blur, 아니면 알파 디밍만)
+  // 배경/장식을 가볍게 디밍해 뒤로 물러나 보이게 (blur는 렉 유발 → 사용 안 함)
   private soften(obj: Phaser.GameObjects.Image) {
-    obj.setAlpha(obj.alpha * 0.7);
-    const fx = (obj as unknown as {
-      postFX?: { addBlur?: (q?: number, x?: number, y?: number, s?: number) => void };
-    }).postFX;
-    if (fx?.addBlur) {
-      try { fx.addBlur(1, 2, 2, 1); } catch { /* WebGL 미지원 시 무시 */ }
-    }
+    obj.setAlpha(obj.alpha * 0.5);
   }
 
   // ─── 충돌 ───

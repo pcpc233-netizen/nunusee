@@ -33,14 +33,6 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   const onGoRankRef = useRef(onGoRank);
   onGoRankRef.current = onGoRank;
 
-  // 플레이 중(결과 없음)에는 브라우저 뷰포트를 꽉 채움 (OS 전체화면 아님)
-  const immersive = phase === 'playing' && !result;
-  // 컨테이너 크기(전체 뷰포트 ↔ 일반)가 바뀌면 Phaser 캔버스 재맞춤
-  useEffect(() => {
-    const t = setTimeout(() => gameRef.current?.scale.refresh(), 80);
-    return () => clearTimeout(t);
-  }, [immersive]);
-
   // Start game after character selected
   useEffect(() => {
     if (phase !== 'playing' || !containerRef.current) return;
@@ -113,14 +105,10 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
   }
 
   return (
-    <div className={immersive
-      ? 'fixed inset-0 z-[100] bg-[#0d0a2e] flex items-center justify-center'
-      : 'flex flex-col items-center gap-4 w-full'}>
-      {/* Character badge (몰입 모드에선 상단 오버레이) */}
+    <div className="flex flex-col items-center gap-4 w-full">
+      {/* Character badge */}
       <div
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-bold shadow ${
-          immersive ? 'absolute top-2 left-1/2 -translate-x-1/2 z-10' : ''
-        }`}
+        className="flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-bold shadow z-10"
         style={{ backgroundColor: character.cssColor }}
       >
         <span>{character.emoji}</span>
@@ -129,22 +117,22 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
           onClick={handleReselect}
           className="ml-2 text-white/70 hover:text-white underline text-xs"
         >
-          {immersive ? '나가기' : '바꾸기'}
+          바꾸기
         </button>
       </div>
 
-      {/* Phaser canvas — 몰입 모드면 뷰포트 채움, 아니면 모바일 맞춤 */}
-      <div
-        className={immersive ? 'overflow-hidden' : 'w-full rounded-2xl overflow-hidden shadow-2xl border-4'}
-        style={immersive
-          ? { width: '100vw', height: '100vh' }
-          : {
-              borderColor: character.cssColor + '88',
-              maxWidth: GAME_WIDTH,
-              aspectRatio: `${GAME_WIDTH}/${GAME_HEIGHT}`,
-            }}
-      >
-        <div ref={containerRef} className="w-full h-full" />
+      {/* Phaser canvas — 화면 폭의 대부분을 쓰되 적당한 최대치(1040px)로 확대 (full-bleed) */}
+      <div className="relative left-1/2 -translate-x-1/2 w-screen flex justify-center px-2">
+        <div
+          className="rounded-2xl overflow-hidden shadow-2xl border-4"
+          style={{
+            borderColor: character.cssColor + '88',
+            width: 'min(96vw, 1040px)',
+            aspectRatio: `${GAME_WIDTH}/${GAME_HEIGHT}`,
+          }}
+        >
+          <div ref={containerRef} className="w-full h-full" />
+        </div>
       </div>
 
       {submitting && (

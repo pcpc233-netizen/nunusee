@@ -108,6 +108,9 @@ export class GameScene extends Phaser.Scene {
       return img;
     });
 
+    // 장애물이 아닌 배경·장식(유령의 집/배경 박쥐/덤불/촛불)은 흐림+디밍 → 실제 장애물만 또렷하게
+    [...this.buildings, ...this.clouds, ...this.decor].forEach((o) => this.soften(o));
+
     // 속도선 (공중에 뜨는 흰 선)
     this.speedLines = Array.from({ length: 6 }, (_) =>
       this.add.image(
@@ -314,6 +317,17 @@ export class GameScene extends Phaser.Scene {
   private fitByHeight(img: Phaser.Physics.Arcade.Image, targetH: number) {
     const r = img.width / img.height || 1;
     img.setDisplaySize(targetH * r, targetH);
+  }
+
+  // 배경/장식을 흐림+디밍 처리 (WebGL이면 blur, 아니면 알파 디밍만)
+  private soften(obj: Phaser.GameObjects.Image) {
+    obj.setAlpha(obj.alpha * 0.7);
+    const fx = (obj as unknown as {
+      postFX?: { addBlur?: (q?: number, x?: number, y?: number, s?: number) => void };
+    }).postFX;
+    if (fx?.addBlur) {
+      try { fx.addBlur(1, 2, 2, 1); } catch { /* WebGL 미지원 시 무시 */ }
+    }
   }
 
   // ─── 충돌 ───

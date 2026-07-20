@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  background: #0d0a2e;
+  overflow: hidden;
+  /* 키오스크 터치 UX: 텍스트 선택/길게 눌러 나오는 메뉴/확대 방지 */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* ── 대기화면(Attract Screen) 애니메이션 ── */
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+@keyframes float-y-soft {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-1.5deg); }
+}
+
+@keyframes bob-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  45% { transform: translateY(-22px) scale(1.02); }
+  55% { transform: translateY(-22px) scale(1.02); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+
+@keyframes sparkle-rise {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 0.6; }
+  100% { transform: translateY(-120px) scale(1); opacity: 0; }
+}
+
+@keyframes cta-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+
+@keyframes bat-fly {
+  0% { transform: translate(-10vw, 0) scaleX(1); }
+  48% { transform: translate(55vw, -6vh) scaleX(1); }
+  50% { transform: translate(58vw, -6vh) scaleX(-1); }
+  100% { transform: translate(110vw, 4vh) scaleX(-1); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.7; }
+  55% { opacity: 0.9; }
+  70% { opacity: 0.65; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.anim-float { animation: float-y 3.4s ease-in-out infinite; }
+.anim-float-soft { animation: float-y-soft 4.2s ease-in-out infinite; }
+.anim-bounce { animation: bob-bounce 1.8s ease-in-out infinite; }
+.anim-twinkle { animation: twinkle 2.6s ease-in-out infinite; }
+.anim-glow { animation: glow-pulse 3s ease-in-out infinite; }
+.anim-sparkle { animation: sparkle-rise linear infinite; }
+.anim-cta { animation: cta-pulse 1.6s ease-in-out infinite; }
+.anim-bat { animation: bat-fly linear infinite; }
+.anim-flicker { animation: flicker 2.4s ease-in-out infinite; }
+.anim-fade-in { animation: fade-in 0.5s ease-out both; }
+.anim-fade-in-up { animation: fade-in-up 0.5s ease-out both; }

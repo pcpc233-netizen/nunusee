@@ -36,7 +36,8 @@ export class GameScene extends Phaser.Scene {
   private jumpStretchTween: Phaser.Tweens.Tween | null = null;
 
   private score = 0;
-  private speed = 290;
+  // 키오스크(현장) 전용 밸런스: 온라인 버전보다 난이도를 높여 1인당 평균 플레이 시간을 줄임 (대기줄 회전율)
+  private speed = 340;
   private isGameOver = false;
   private jumpCount = 0;
   private maxJumps = 1;
@@ -54,7 +55,7 @@ export class GameScene extends Phaser.Scene {
 
   private obstacleTimer!: Phaser.Time.TimerEvent;
   private itemTimer!: Phaser.Time.TimerEvent;
-  private nextEventScore = 800;
+  private nextEventScore = 550;
   private lastScoreForSpeed = 0;
   private hardMode = false;
 
@@ -65,13 +66,13 @@ export class GameScene extends Phaser.Scene {
 
     // Reset
     this.score = 0;
-    this.speed = 290;
+    this.speed = 340;
     this.isGameOver = false;
     this.jumpCount = 0;
     this.maxJumps = 1;
     this.isInvincible = false;
     this.baseScale = CHAR_SCALE;
-    this.nextEventScore = 800;
+    this.nextEventScore = 550;
     this.lastScoreForSpeed = 0;
     this.hardMode = false;
 
@@ -183,7 +184,7 @@ export class GameScene extends Phaser.Scene {
 
     // ── 타이머 ──
     this.obstacleTimer = this.time.addEvent({
-      delay: 1700, callback: this.spawnObstacle, callbackScope: this, loop: true,
+      delay: 1400, callback: this.spawnObstacle, callbackScope: this, loop: true,
     });
     this.itemTimer = this.time.addEvent({
       delay: 4200, callback: this.spawnItem, callbackScope: this, loop: true,
@@ -403,7 +404,7 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.flash(600, 76, 29, 149);
 
     // 🔥 하드모드 알림 텍스트
-    const lines = ['💀 1000m 돌파!', '공포 모드 시작!'];
+    const lines = ['💀 450m 돌파!', '공포 모드 시작!'];
     lines.forEach((line, i) => {
       const txt = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60 + i * 44, line, {
         fontSize: i === 0 ? '32px' : '26px',
@@ -432,7 +433,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     // 즉시 속도 대폭 상승
-    this.speed = Math.min(this.speed + 80, 900);
+    this.speed = Math.min(this.speed + 100, 950);
     this.updateGroupSpeeds();
   }
 
@@ -440,12 +441,12 @@ export class GameScene extends Phaser.Scene {
     const msg = EVENT_MESSAGES[Phaser.Math.Between(0, EVENT_MESSAGES.length - 1)];
     this.eventText.setText(msg).setAlpha(1);
     this.tweens.add({ targets: this.eventText, alpha: 0, duration: 1400, delay: 900 });
-    const boost = this.hardMode ? 65 : 45;
-    const cap   = this.hardMode ? 900 : 680;
+    const boost = this.hardMode ? 80 : 55;
+    const cap   = this.hardMode ? 950 : 750;
     this.speed = Math.min(this.speed + boost, cap);
     this.nextEventScore += this.hardMode
-      ? 500 + Math.floor(this.score / 500) * 50
-      : 800 + Math.floor(this.score / 500) * 80;
+      ? 320 + Math.floor(this.score / 400) * 40
+      : 500 + Math.floor(this.score / 400) * 60;
 
     // 속도선 플래시
     this.speedLines.forEach((line, i) => {
@@ -466,13 +467,13 @@ export class GameScene extends Phaser.Scene {
     this.scoreText.setText(`${displayScore}m`);
     this.scoreText.setColor(this.hardMode ? '#f87171' : '#ffffff');
 
-    // 1000m 하드모드 진입
-    if (displayScore >= 1000 && !this.hardMode) this.activateHardMode();
+    // 450m 하드모드 진입 (키오스크 전용: 온라인 1000m보다 훨씬 앞당김)
+    if (displayScore >= 450 && !this.hardMode) this.activateHardMode();
 
-    // 속도 점진적 증가 (하드모드: 100m마다 +14 / 일반: 200m마다 +8)
-    const speedInterval = this.hardMode ? 100 : 200;
-    const speedGain    = this.hardMode ? 14 : 8;
-    const speedCap     = this.hardMode ? 900 : 680;
+    // 속도 점진적 증가 (하드모드: 80m마다 +18 / 일반: 130m마다 +12)
+    const speedInterval = this.hardMode ? 80 : 130;
+    const speedGain    = this.hardMode ? 18 : 12;
+    const speedCap     = this.hardMode ? 950 : 750;
     if (displayScore - this.lastScoreForSpeed >= speedInterval) {
       this.speed = Math.min(this.speed + speedGain, speedCap);
       this.lastScoreForSpeed = displayScore;
@@ -519,8 +520,8 @@ export class GameScene extends Phaser.Scene {
         (o as Phaser.Physics.Arcade.Image).setVelocityX(-this.speed)
       )
     );
-    const minDelay  = this.hardMode ? 650 : 950;
-    const reduction = this.hardMode ? 40 : 25;
+    const minDelay  = this.hardMode ? 480 : 780;
+    const reduction = this.hardMode ? 48 : 34;
     if (this.obstacleTimer.delay > minDelay) {
       const newDelay = Math.max(minDelay, this.obstacleTimer.delay - reduction);
       this.obstacleTimer.reset({ delay: newDelay, callback: this.spawnObstacle, callbackScope: this, loop: true });

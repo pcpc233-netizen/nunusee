@@ -137,12 +137,14 @@ export default function AttractScreen({ onStart }: Props) {
         </div>
       )}
 
-      {/* CTA */}
-      <div className="absolute bottom-[4%] left-1/2 -translate-x-1/2 text-center anim-cta">
-        <p className="text-white font-black text-2xl sm:text-4xl drop-shadow-[0_2px_8px_rgba(124,58,237,0.8)]">
-          👆 화면을 터치해서 시작하세요
-        </p>
-        <p className="text-purple-300 text-sm sm:text-base mt-1">귀신을 피해 최대한 멀리 달려보세요!</p>
+      {/* CTA — 위치잡이(translate-x)와 펄스 애니메이션(scale)을 다른 요소에 분리해 transform 충돌 방지 */}
+      <div className="absolute bottom-[4%] left-1/2 -translate-x-1/2 w-full text-center">
+        <div className="inline-block anim-cta">
+          <p className="text-white font-black text-2xl sm:text-4xl drop-shadow-[0_2px_8px_rgba(124,58,237,0.8)] whitespace-nowrap">
+            👆 화면을 터치해서 시작하세요
+          </p>
+          <p className="text-purple-300 text-sm sm:text-base mt-1">귀신을 피해 최대한 멀리 달려보세요!</p>
+        </div>
       </div>
     </div>
   );

@@ -104,31 +104,33 @@ export default function AttractScreen({ onStart }: Props) {
       <img src="/assets/candle.png" alt="" className="absolute bottom-[14%] right-[22%] h-11 sm:h-14 anim-flicker" style={{ animationDelay: '1.1s' }} />
 
       {/* 상단 브랜드 + 타이틀 간판 */}
-      <div className="absolute top-[4%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-        <p className="font-serif font-black tracking-tight text-[#e0567a] text-lg sm:text-2xl mb-1 opacity-90">
-          F.ILLUMINATE<span className="text-[10px] align-super">®</span>
+      <div className="absolute top-[3%] left-1/2 -translate-x-1/2 flex flex-col items-center">
+        <p className="mb-1.5 text-base sm:text-2xl font-black tracking-wide">
+          <span className="text-[#f2c14e]">누누씨</span>
+          <span className="text-purple-200 font-serif"> × FILLUMINATE<span className="text-[10px] align-super">®</span></span>
         </p>
         <div className="relative">
-          <div className="absolute inset-0 anim-glow" style={{ background: 'radial-gradient(circle, rgba(245,197,24,0.35) 0%, transparent 70%)', filter: 'blur(12px)' }} />
-          <img src="/assets/sign_haunted.png" alt="누누씨 귀신의 집?!" className="relative w-[62vw] max-w-xl anim-float-soft drop-shadow-2xl" />
+          <div className="absolute inset-0 anim-glow" style={{ background: 'radial-gradient(circle, rgba(245,197,24,0.35) 0%, transparent 70%)', filter: 'blur(16px)' }} />
+          <img src="/assets/sign_haunted.png" alt="누누씨 귀신의 집?!" className="relative w-[70vw] max-w-3xl anim-float-soft drop-shadow-2xl" />
         </div>
       </div>
 
-      {/* 캐릭터 라인업 */}
-      <div className="absolute bottom-[16%] left-1/2 -translate-x-1/2 flex items-end gap-6 sm:gap-10">
+      {/* 캐릭터 라인업 — 크게, 중앙, 달리는 방향(우측) 보도록 미러 */}
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 flex items-end justify-center gap-3 sm:gap-8">
         {CHARACTERS.map((c, i) => (
-          <img
-            key={c.key}
-            src={c.imageUrl}
-            alt={c.name}
-            className="anim-bounce drop-shadow-xl"
-            style={{
-              height: i === 1 ? '15vh' : '12vh',
-              animationDelay: `${i * 0.25}s`,
-            }}
-          />
+          <div key={c.key} className="anim-bounce" style={{ animationDelay: `${i * 0.25}s` }}>
+            <img
+              src={c.imageUrl}
+              alt={c.name}
+              className="drop-shadow-2xl -scale-x-100"
+              style={{ height: i === 1 ? '30vh' : '25vh' }}
+            />
+          </div>
         ))}
       </div>
+
+      {/* ©nunussi 카피라이트 (좌하단) */}
+      <img src="/copyright_white.png" alt="©nunussi" className="absolute bottom-[3.5%] left-[3%] h-4 sm:h-5 opacity-70" />
 
       {/* 오늘의 최고 기록 */}
       {topScore !== null && (

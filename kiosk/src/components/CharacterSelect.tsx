@@ -35,7 +35,7 @@ export default function CharacterSelect({ onSelect }: Props) {
                   : 'border-transparent bg-white/5 opacity-70'
               }`}
             >
-              <img src={char.imageUrl} alt={char.name} className="h-24 sm:h-40 object-contain drop-shadow-xl mb-2" />
+              <img src={char.imageUrl} alt={char.name} className="h-24 sm:h-40 object-contain drop-shadow-xl mb-2 -scale-x-100" />
               <p className="font-black text-white text-lg sm:text-2xl">{char.name}</p>
               <p className="text-xs sm:text-sm font-bold mt-0.5" style={{ color: char.cssColor }}>{char.trait}</p>
             </button>

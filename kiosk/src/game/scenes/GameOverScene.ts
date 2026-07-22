@@ -12,23 +12,8 @@ export class GameOverScene extends Phaser.Scene {
     const score = data?.score ?? 0;
     this.characterKey = data?.characterKey ?? 'deokchun';
 
-    // 배경 오버레이 (납량 어두운 보라)
-    this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x0d0a2e, 0.82);
-
-    // 유령 배경 장식 (큰 반투명 유령들)
-    const ghostDeco = (x: number, y: number, scale: number, alpha: number) => {
-      const g = this.add.graphics();
-      g.fillStyle(0xc4b5fd, alpha);
-      g.fillCircle(0, -10, 20 * scale);
-      g.fillRect(-20 * scale, -10, 40 * scale, 24 * scale);
-      g.fillCircle(-12 * scale, 14 * scale, 10 * scale);
-      g.fillCircle(0, 14 * scale, 10 * scale);
-      g.fillCircle(12 * scale, 14 * scale, 10 * scale);
-      g.x = x; g.y = y;
-    };
-    ghostDeco(80, 80, 1.2, 0.08);
-    ghostDeco(680, 60, 1.5, 0.06);
-    ghostDeco(400, 320, 0.9, 0.07);
+    // 배경 오버레이 (불투명 — 뒤 게임 장식이 비치지 않도록, 피드백 반영)
+    this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x0d0a2e, 1);
 
     // 으악 텍스트 (상단)
     this.add.text(GAME_WIDTH / 2, 26, '으악 ㅠㅠ 잡혔다!', {
@@ -43,12 +28,13 @@ export class GameOverScene extends Phaser.Scene {
       stroke: '#1e1b4b', strokeThickness: 4,
     }).setOrigin(0.5).setDepth(20);
 
-    // 빨간 분필 GAME OVER (2줄)
+    // 빨간 분필 GAME OVER (2줄) — 폰트 더 굵게 (동일 색 두꺼운 stroke로 글자 두께 증가)
     this.add.text(GAME_WIDTH / 2, 158, 'GAME\nOVER', {
-      fontSize: '50px', color: '#e4002b',
+      fontSize: '54px', color: '#ec0b30',
       fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
-      align: 'center', stroke: '#3b0a0a', strokeThickness: 6,
-      lineSpacing: -10,
+      align: 'center', stroke: '#ec0b30', strokeThickness: 11,
+      lineSpacing: -8,
+      shadow: { offsetX: 0, offsetY: 0, color: '#3b0a0a', blur: 6, stroke: true, fill: true },
     }).setOrigin(0.5).setDepth(20);
 
     // ── 나무 간판 버튼 (RETRY / RANK — 로컬 TOP10) ──

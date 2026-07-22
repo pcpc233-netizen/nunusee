@@ -60,15 +60,22 @@ export default function AttractScreen({ onStart }: Props) {
         />
       ))}
 
-      {/* 달 */}
+      {/* 달 (SVG 초승달 — 깎인 부분이 투명해 하늘이 그대로 비침) */}
       <div className="absolute top-[6%] right-[8%]">
         <div
-          className="absolute inset-0 rounded-full anim-glow"
-          style={{ width: 140, height: 140, left: -20, top: -20, background: 'radial-gradient(circle, rgba(254,249,195,0.35) 0%, transparent 70%)' }}
+          className="absolute rounded-full anim-glow"
+          style={{ width: 150, height: 150, left: -25, top: -25, background: 'radial-gradient(circle, rgba(254,249,195,0.4) 0%, transparent 70%)' }}
         />
-        <div className="relative rounded-full" style={{ width: 100, height: 100, background: '#fef9c3', boxShadow: '0 0 40px rgba(254,249,195,0.5)' }}>
-          <div className="absolute rounded-full" style={{ width: 78, height: 78, background: '#1a0a4e', top: -6, left: 30 }} />
-        </div>
+        <svg className="relative" width="100" height="100" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 14px rgba(254,249,195,0.55))' }}>
+          <defs>
+            <mask id="crescentMask">
+              <rect width="100" height="100" fill="black" />
+              <circle cx="46" cy="50" r="42" fill="white" />
+              <circle cx="66" cy="41" r="38" fill="black" />
+            </mask>
+          </defs>
+          <circle cx="46" cy="50" r="42" fill="#fef9c3" mask="url(#crescentMask)" />
+        </svg>
       </div>
 
       {/* 박쥐 (배경 장식, 흐릿하게) */}
@@ -105,28 +112,30 @@ export default function AttractScreen({ onStart }: Props) {
 
       {/* 상단 브랜드 + 타이틀 간판 */}
       <div className="absolute top-[3%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-        <p className="mb-1.5 text-base sm:text-2xl font-black tracking-wide">
-          <span className="text-[#f2c14e]">누누씨</span>
-          <span className="text-purple-200 font-serif"> × FILLUMINATE<span className="text-[10px] align-super">®</span></span>
-        </p>
+        <div className="mb-1.5 flex items-center gap-2">
+          <img src="/nunusee_logo.png" alt="누누씨" className="h-5 sm:h-7 object-contain" />
+          <span className="text-purple-200 font-serif text-base sm:text-2xl font-black tracking-wide">× FILLUMINATE<span className="text-[10px] align-super">®</span></span>
+        </div>
         <div className="relative">
           <div className="absolute inset-0 anim-glow" style={{ background: 'radial-gradient(circle, rgba(245,197,24,0.35) 0%, transparent 70%)', filter: 'blur(16px)' }} />
           <img src="/assets/sign_haunted.png" alt="누누씨 귀신의 집?!" className="relative w-[70vw] max-w-3xl anim-float-soft drop-shadow-2xl" />
         </div>
       </div>
 
-      {/* 캐릭터 라인업 — 크게, 중앙, 달리는 방향(우측) 보도록 미러 */}
+      {/* 캐릭터 라인업 — 크게, 중앙. 순서: 덕자(브라운)·덕희(화이트, 가운데 크게)·덕춘(옐로) */}
       <div className="absolute top-[40%] left-1/2 -translate-x-1/2 flex items-end justify-center gap-3 sm:gap-8">
-        {CHARACTERS.map((c, i) => (
-          <div key={c.key} className="anim-bounce" style={{ animationDelay: `${i * 0.25}s` }}>
-            <img
-              src={c.imageUrl}
-              alt={c.name}
-              className="drop-shadow-2xl"
-              style={{ height: i === 1 ? '30vh' : '25vh' }}
-            />
-          </div>
-        ))}
+        {['deokja', 'deokhee', 'deokchun']
+          .map((k) => CHARACTERS.find((c) => c.key === k)!)
+          .map((c, i) => (
+            <div key={c.key} className="anim-bounce" style={{ animationDelay: `${i * 0.25}s` }}>
+              <img
+                src={c.imageUrl}
+                alt={c.name}
+                className="drop-shadow-2xl"
+                style={{ height: i === 1 ? '30vh' : '25vh' }}
+              />
+            </div>
+          ))}
       </div>
 
       {/* ©nunussi 카피라이트 (좌하단) */}

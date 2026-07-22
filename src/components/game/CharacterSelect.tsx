@@ -53,7 +53,7 @@ export default function CharacterSelect({ onSelect }: Props) {
                   <img
                     src={char.imageUrl}
                     alt={char.name}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain -scale-x-100"
                     crossOrigin="anonymous"
                     onError={() => setImgErrors(prev => ({ ...prev, [char.key]: true }))}
                   />

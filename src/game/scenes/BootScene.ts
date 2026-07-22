@@ -23,6 +23,7 @@ export class BootScene extends Phaser.Scene {
     this.load.image('deco_bush2', '/assets/bush2.png');
     this.load.image('deco_candle', '/assets/candle.png');
     this.load.image('deco_candle2', '/assets/candle_lit.png');
+    this.load.image('copyright', '/copyright_white.png');     // ©nunussi 카피라이트
     this.load.on('loaderror', (file: { key: string }) => {
       this.loadErrors.add(file.key);
     });
@@ -44,11 +45,11 @@ export class BootScene extends Phaser.Scene {
       bgGfx.fillStyle(0xffffff, Math.random() * 0.5 + 0.4);
       bgGfx.fillCircle(sx, sy, r);
     });
-    // 달
+    // 달 (초승달) — 깎아내는 원 색을 이 높이의 하늘색과 일치시켜 원반 아티팩트 제거
     bgGfx.fillStyle(0xfef9c3, 1);
-    bgGfx.fillCircle(700, 55, 28);
-    bgGfx.fillStyle(0x1a0a4e, 1);
-    bgGfx.fillCircle(714, 47, 22);
+    bgGfx.fillCircle(702, 54, 27);
+    bgGfx.fillStyle(0x0d0a2e, 1);
+    bgGfx.fillCircle(716, 48, 26);
     bgGfx.generateTexture('sky', GAME_WIDTH, GROUND_Y);
     bgGfx.destroy();
 

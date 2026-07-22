@@ -80,9 +80,9 @@ export class GameScene extends Phaser.Scene {
 
     // 건물 실루엣 (parallax 느린 레이어)
     this.buildings = [
-      this.add.image(80, GROUND_Y - 50, 'buildings').setAlpha(0.6),
-      this.add.image(350, GROUND_Y - 50, 'buildings').setAlpha(0.5),
-      this.add.image(620, GROUND_Y - 50, 'buildings').setAlpha(0.55),
+      this.add.image(80, GROUND_Y - 50, 'buildings').setAlpha(0.42),
+      this.add.image(350, GROUND_Y - 50, 'buildings').setAlpha(0.36),
+      this.add.image(620, GROUND_Y - 50, 'buildings').setAlpha(0.4),
     ];
 
     // 구름 (parallax 빠른 레이어)
@@ -134,6 +134,7 @@ export class GameScene extends Phaser.Scene {
     );
     this.player.setCollideWorldBounds(true);
     this.player.setDepth(10);
+    this.player.setFlipX(true); // 달리는 방향(우측)을 보도록
 
     // ── 지면 정적 바디 (두껍게 — 점프 후 빠른 낙하 시 얇은 바닥 관통 방지) ──
     const floorH = GAME_HEIGHT - GROUND_Y;
@@ -202,6 +203,15 @@ export class GameScene extends Phaser.Scene {
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
       stroke: '#1e1b4b', strokeThickness: 5,
     }).setOrigin(0.5).setDepth(30).setAlpha(0);
+
+    // ©nunussi 카피라이트 (우측 하단 코너)
+    if (this.textures.exists('copyright')) {
+      this.add.image(GAME_WIDTH - 10, GAME_HEIGHT - 8, 'copyright')
+        .setOrigin(1, 1)
+        .setScale(0.22)
+        .setAlpha(0.55)
+        .setDepth(20);
+    }
 
     // ── 입력 ──
     this.input.keyboard?.on('keydown-SPACE', this.doJump, this);
@@ -322,7 +332,7 @@ export class GameScene extends Phaser.Scene {
 
   // 배경/장식을 가볍게 디밍해 뒤로 물러나 보이게 (blur는 렉 유발 → 사용 안 함)
   private soften(obj: Phaser.GameObjects.Image) {
-    obj.setAlpha(obj.alpha * 0.5);
+    obj.setAlpha(obj.alpha * 0.35);
   }
 
   // ─── 충돌 ───
@@ -398,8 +408,7 @@ export class GameScene extends Phaser.Scene {
   private activateHardMode() {
     this.hardMode = true;
 
-    // 카메라 흔들림 + 오렌지 플래시
-    this.cameras.main.shake(500, 0.02);
+    // 보라 플래시만 (화면 떨림 제거 — 피드백 반영)
     this.cameras.main.flash(600, 76, 29, 149);
 
     // 🔥 하드모드 알림 텍스트

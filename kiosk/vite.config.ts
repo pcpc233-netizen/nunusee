@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// 프로덕션에서는 Electron이 로컬 정적 서버(http://127.0.0.1)로 dist를 서빙하므로
-// 절대경로(/characters/...) 에셋 참조가 그대로 동작함 (base는 기본값 '/' 유지)
+// 브라우저 키오스크 모드: calcmoum.com/kiosk/ 경로로 서빙.
+// JS/CSS는 /kiosk/assets/로 나가고, 런타임 에셋(/characters, /assets, /fonts, /copyright_white.png)은
+// 웹앱과 동일한 파일을 루트에서 공유하므로 절대경로 그대로 사용한다.
 export default defineConfig({
+  base: '/kiosk/',
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1800,

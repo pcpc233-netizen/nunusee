@@ -122,7 +122,7 @@ export default function AttractScreen({ onStart }: Props) {
             <img
               src={c.imageUrl}
               alt={c.name}
-              className="drop-shadow-2xl -scale-x-100"
+              className="drop-shadow-2xl"
               style={{ height: i === 1 ? '30vh' : '25vh' }}
             />
           </div>

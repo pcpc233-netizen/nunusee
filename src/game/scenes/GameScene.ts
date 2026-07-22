@@ -134,7 +134,7 @@ export class GameScene extends Phaser.Scene {
     );
     this.player.setCollideWorldBounds(true);
     this.player.setDepth(10);
-    this.player.setFlipX(true); // 달리는 방향(우측)을 보도록
+    this.player.setFlipX(false); // 원본이 우측을 보므로 미러 없이 사용 (달리는 방향)
 
     // ── 지면 정적 바디 (두껍게 — 점프 후 빠른 낙하 시 얇은 바닥 관통 방지) ──
     const floorH = GAME_HEIGHT - GROUND_Y;

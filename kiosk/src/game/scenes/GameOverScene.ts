@@ -16,20 +16,20 @@ export class GameOverScene extends Phaser.Scene {
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x0d0a2e, 1);
 
     // 으악 텍스트 (전체를 화면 중앙에 맞춰 배치)
-    this.add.text(GAME_WIDTH / 2, 80, '으악 ㅠㅠ 잡혔다!', {
+    this.add.text(GAME_WIDTH / 2, 48, '으악 ㅠㅠ 잡혔다!', {
       fontSize: '16px', color: '#c4b5fd',
       fontFamily: '"Nanum Gothic", sans-serif',
     }).setOrigin(0.5).setDepth(20);
 
     // 점수 (흰색, 목업처럼 깔끔하게)
-    this.add.text(GAME_WIDTH / 2, 120, `${score}m`, {
+    this.add.text(GAME_WIDTH / 2, 90, `${score}m`, {
       fontSize: '32px', color: '#ffffff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
       stroke: '#1e1b4b', strokeThickness: 4,
     }).setOrigin(0.5).setDepth(20);
 
     // 빨간 분필 GAME OVER (2줄) — 폰트 더 굵게 (동일 색 두꺼운 stroke로 글자 두께 증가)
-    this.add.text(GAME_WIDTH / 2, 212, 'GAME\nOVER', {
+    this.add.text(GAME_WIDTH / 2, 225, 'GAME\nOVER', {
       fontSize: '54px', color: '#ec0b30',
       fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
       align: 'center', stroke: '#ec0b30', strokeThickness: 11,

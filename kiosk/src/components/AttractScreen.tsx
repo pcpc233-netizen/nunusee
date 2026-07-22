@@ -112,9 +112,10 @@ export default function AttractScreen({ onStart }: Props) {
 
       {/* 상단 브랜드 + 타이틀 간판 */}
       <div className="absolute top-[3%] left-1/2 -translate-x-1/2 flex flex-col items-center">
-        <div className="mb-1.5 flex items-center gap-2">
+        <div className="mb-1.5 flex items-center gap-2.5">
           <img src="/nunusee_logo.png" alt="누누씨" className="h-5 sm:h-7 object-contain" />
-          <span className="text-purple-200 font-serif text-base sm:text-2xl font-black tracking-wide">× FILLUMINATE<span className="text-[10px] align-super">®</span></span>
+          <span className="text-purple-200 font-serif text-base sm:text-2xl font-black">×</span>
+          <img src="/filluminate_logo.png" alt="FILLUMINATE" className="h-3.5 sm:h-5 object-contain" />
         </div>
         <div className="relative">
           <div className="absolute inset-0 anim-glow" style={{ background: 'radial-gradient(circle, rgba(245,197,24,0.35) 0%, transparent 70%)', filter: 'blur(16px)' }} />

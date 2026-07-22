@@ -15,21 +15,21 @@ export class GameOverScene extends Phaser.Scene {
     // 배경 오버레이 (불투명 — 뒤 게임 장식이 비치지 않도록, 피드백 반영)
     this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x0d0a2e, 1);
 
-    // 으악 텍스트 (상단)
-    this.add.text(GAME_WIDTH / 2, 26, '으악 ㅠㅠ 잡혔다!', {
+    // 으악 텍스트 (전체를 화면 중앙에 맞춰 배치)
+    this.add.text(GAME_WIDTH / 2, 80, '으악 ㅠㅠ 잡혔다!', {
       fontSize: '16px', color: '#c4b5fd',
       fontFamily: '"Nanum Gothic", sans-serif',
     }).setOrigin(0.5).setDepth(20);
 
     // 점수 (흰색, 목업처럼 깔끔하게)
-    this.add.text(GAME_WIDTH / 2, 58, `${score}m`, {
+    this.add.text(GAME_WIDTH / 2, 120, `${score}m`, {
       fontSize: '32px', color: '#ffffff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
       stroke: '#1e1b4b', strokeThickness: 4,
     }).setOrigin(0.5).setDepth(20);
 
     // 빨간 분필 GAME OVER (2줄) — 폰트 더 굵게 (동일 색 두꺼운 stroke로 글자 두께 증가)
-    this.add.text(GAME_WIDTH / 2, 158, 'GAME\nOVER', {
+    this.add.text(GAME_WIDTH / 2, 212, 'GAME\nOVER', {
       fontSize: '54px', color: '#ec0b30',
       fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
       align: 'center', stroke: '#ec0b30', strokeThickness: 11,
@@ -38,7 +38,7 @@ export class GameOverScene extends Phaser.Scene {
     }).setOrigin(0.5).setDepth(20);
 
     // 재시작 안내 (RETRY/RANK 버튼 제거 — 피드백 반영, 탭/스페이스로 재시작)
-    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 50, '👆 화면을 탭하거나 스페이스를 눌러 다시 시작', {
+    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 42, '👆 화면을 탭하거나 스페이스를 눌러 다시 시작', {
       fontSize: '17px', color: '#e9d5ff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
     }).setOrigin(0.5).setDepth(20);

@@ -36,7 +36,7 @@ export class GameScene extends Phaser.Scene {
   private jumpStretchTween: Phaser.Tweens.Tween | null = null;
 
   private score = 0;
-  // 키오스크(현장) 전용 밸런스: 온라인 버전보다 난이도를 높여 1인당 평균 플레이 시간을 줄임 (대기줄 회전율)
+  // 밸런스: 500m 이후 빠른(공포) 모드 진입 — 웹/키오스크 공통
   private speed = 340;
   private isGameOver = false;
   private jumpCount = 0;
@@ -413,7 +413,7 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.flash(600, 76, 29, 149);
 
     // 🔥 하드모드 알림 텍스트
-    const lines = ['💀 450m 돌파!', '공포 모드 시작!'];
+    const lines = ['💀 500m 돌파!', '공포 모드 시작!'];
     lines.forEach((line, i) => {
       const txt = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60 + i * 44, line, {
         fontSize: i === 0 ? '32px' : '26px',
@@ -477,7 +477,7 @@ export class GameScene extends Phaser.Scene {
     this.scoreText.setColor(this.hardMode ? '#f87171' : '#ffffff');
 
     // 450m 하드모드 진입 (키오스크 전용: 온라인 1000m보다 훨씬 앞당김)
-    if (displayScore >= 450 && !this.hardMode) this.activateHardMode();
+    if (displayScore >= 500 && !this.hardMode) this.activateHardMode();
 
     // 속도 점진적 증가 (하드모드: 80m마다 +18 / 일반: 130m마다 +12)
     const speedInterval = this.hardMode ? 80 : 130;

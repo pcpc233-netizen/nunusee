@@ -42,8 +42,8 @@ export class GameOverScene extends Phaser.Scene {
     const maxWidth = GAME_WIDTH - 56;
     if (gameOver.width > maxWidth) gameOver.setScale(maxWidth / gameOver.width);
 
-    // 재시작 안내 (RETRY/RANK 버튼 제거 — 피드백 반영, 탭/스페이스로 재시작)
-    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 42, '👆 화면을 탭하거나 스페이스를 눌러 다시 시작', {
+    // 안내 (탭/스페이스로 캐릭터 다시 고르기 — 같은 캐릭터 즉시 재시작 X)
+    const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 42, '👆 화면을 탭하거나 스페이스를 눌러 캐릭터 다시 고르기', {
       fontSize: '17px', color: '#e9d5ff',
       fontFamily: '"Nanum Gothic", sans-serif', fontStyle: 'bold',
     }).setOrigin(0.5).setDepth(20);
@@ -60,7 +60,7 @@ export class GameOverScene extends Phaser.Scene {
   }
 
   private restart() {
-    this.game.events.emit('restart');
-    this.scene.start('GameScene', { characterKey: this.characterKey });
+    // 같은 캐릭터로 즉시 재시작하지 않고, 캐릭터 선택 화면으로 돌아가 다시 고르게 함
+    this.game.events.emit('reselect');
   }
 }

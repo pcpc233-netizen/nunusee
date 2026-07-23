@@ -50,5 +50,11 @@ export default function App() {
     );
   }
 
-  return <GameWrapper character={character} onExitToAttract={goToAttract} />;
+  return (
+    <GameWrapper
+      character={character}
+      onExitToAttract={goToAttract}
+      onReselect={() => setPhase('select')}
+    />
+  );
 }

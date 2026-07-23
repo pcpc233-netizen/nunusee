@@ -68,14 +68,18 @@ export default function GameWrapper({ userId, nickname, onGoRank }: Props) {
 
     const handleRestart = () => setResult(null);
     const handleGoRank = () => onGoRankRef.current?.();
+    // 게임오버에서 탭/스페이스 → 캐릭터 선택 화면으로 복귀(다시 고르기)
+    const handleReselect = () => { setResult(null); setPhase('select'); };
 
     game.events.on('gameover', handleGameOver);
     game.events.on('restart', handleRestart);
+    game.events.on('reselect', handleReselect);
     game.events.on('gorank', handleGoRank);
 
     return () => {
       game.events.off('gameover', handleGameOver);
       game.events.off('restart', handleRestart);
+      game.events.off('reselect', handleReselect);
       game.events.off('gorank', handleGoRank);
       game.destroy(true);
       gameRef.current = null;

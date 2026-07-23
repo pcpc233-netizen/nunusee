@@ -8,16 +8,19 @@ import LocalRankBoard from './LocalRankBoard';
 interface Props {
   character: CharacterDef;
   onExitToAttract: () => void;
+  onReselect: () => void;
 }
 
 const IDLE_MS = 25000; // 게임오버 후 이 시간 동안 조작 없으면 대기화면으로 복귀
 
-export default function GameWrapper({ character, onExitToAttract }: Props) {
+export default function GameWrapper({ character, onExitToAttract, onReselect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const gameRef = useRef<Phaser.Game | null>(null);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onExitRef = useRef(onExitToAttract);
   onExitRef.current = onExitToAttract;
+  const onReselectRef = useRef(onReselect);
+  onReselectRef.current = onReselect;
 
   const [result, setResult] = useState<{ score: number; isTop10: boolean; rank: number | null } | null>(null);
   const [showRank, setShowRank] = useState(false);
@@ -51,6 +54,12 @@ export default function GameWrapper({ character, onExitToAttract }: Props) {
       clearIdleTimer();
     };
 
+    // 게임오버에서 탭/스페이스 → 캐릭터 선택 화면으로 복귀(다시 고르기)
+    const handleReselect = () => {
+      clearIdleTimer();
+      onReselectRef.current();
+    };
+
     const handleShowRank = () => {
       setShowRank(true);
       armIdleTimer();
@@ -58,11 +67,13 @@ export default function GameWrapper({ character, onExitToAttract }: Props) {
 
     game.events.on('gameover', handleGameOver);
     game.events.on('restart', handleRestart);
+    game.events.on('reselect', handleReselect);
     game.events.on('showlocalrank', handleShowRank);
 
     return () => {
       game.events.off('gameover', handleGameOver);
       game.events.off('restart', handleRestart);
+      game.events.off('reselect', handleReselect);
       game.events.off('showlocalrank', handleShowRank);
       clearIdleTimer();
       game.destroy(true);

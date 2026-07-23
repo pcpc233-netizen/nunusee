@@ -28,14 +28,19 @@ export class GameOverScene extends Phaser.Scene {
       stroke: '#1e1b4b', strokeThickness: 4,
     }).setOrigin(0.5).setDepth(20);
 
-    // 빨간 분필 GAME OVER (2줄) — 폰트 더 굵게 (동일 색 두꺼운 stroke로 글자 두께 증가)
-    this.add.text(GAME_WIDTH / 2, 225, 'GAME\nOVER', {
+    // 빨간 분필 GAME OVER (2줄) — 동일 색 두꺼운 stroke로 둥글고 도톰한 글자
+    // padding: 두꺼운 stroke/그림자가 텍스트 캔버스 밖으로 잘리지 않도록 여백 확보(가장자리 글자 둥글게)
+    const gameOver = this.add.text(GAME_WIDTH / 2, 225, 'GAME\nOVER', {
       fontSize: '54px', color: '#ec0b30',
       fontFamily: "'Rock Salt', 'Nanum Gothic', cursive",
       align: 'center', stroke: '#ec0b30', strokeThickness: 11,
       lineSpacing: -8,
       shadow: { offsetX: 0, offsetY: 0, color: '#3b0a0a', blur: 6, stroke: true, fill: true },
+      padding: { x: 22, y: 18 },
     }).setOrigin(0.5).setDepth(20);
+    // 캔버스 폭을 넘으면 좌우가 잘리므로 여백 안에 맞게 자동 축소
+    const maxWidth = GAME_WIDTH - 56;
+    if (gameOver.width > maxWidth) gameOver.setScale(maxWidth / gameOver.width);
 
     // 재시작 안내 (RETRY/RANK 버튼 제거 — 피드백 반영, 탭/스페이스로 재시작)
     const hint = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 42, '👆 화면을 탭하거나 스페이스를 눌러 다시 시작', {
